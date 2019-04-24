@@ -1,0 +1,61 @@
+body{
+    background-color: #F3F3F3;
+   
+  }
+  .contenedor-formulario{
+    display: flex;
+    justify-content: center;
+    background-image: url(../../../assets/imagenes/prueba.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    height: 100vh;
+    position: relative;
+  }
+.contenedor-formulario:before{
+  content: "";
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  position: absolute;
+  opacity: 0.5;
+}
+.logo-login{
+  width: 100%;
+  margin-top: 40px;
+}
+form{
+  width: 35%;
+  height: 100vh;
+    /*box-shadow: 0px 0px 32px -2px rgba(0,0,0,0.75);*/
+  padding: 30px;
+  z-index: 1;
+}
+.form-control{
+  border-radius: 15px;
+  padding: 23px 0px 23px 15px;
+}
+
+.titulo-login{
+  text-align: center;
+  margin-bottom: 35px;
+  color: white;
+  font-size: 55px;
+}
+.contedor-btn-iniciar{
+    text-align: center;
+}
+
+.contenedor-no-registrado{
+    margin-top: 10px;
+    text-align: center;
+}
+.txt-no-registrado{
+    display: inline;
+    color: white;
+    font-size: 20px;
+}
+.contenedor-no-registrado a{
+  font-size: 20px;
+}
