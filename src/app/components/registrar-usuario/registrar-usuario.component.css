@@ -58,7 +58,7 @@ span {
 #sidebar {
     min-width: 280px;
     max-width: 280px;
-    background: #7386D5;
+    background: #00498B;
     color: #fff;
     transition: all 0.3s;
 }
@@ -203,6 +203,12 @@ a.article:hover {
     justify-content: center;
 
 }
+form{
+    width: 70%;
+	box-shadow: 0px 0px 12px 2px rgba(0,0,0,0.75);
+    padding: 30px;
+    margin: 0 auto;
+}
 .form-crear-incentivo{
     width: 55%;
 	box-shadow: 0px 0px 32px -2px rgba(0,0,0,0.75);
@@ -264,16 +270,6 @@ input[type="file"] {
 .ctn-btns-usario-bici{
     margin-left: 30px;
 }
-.ctn-opcion-reporte-inicio{
-    display: flex;
-    margin: 30px 0;
-}
-.ctn-opcion-reporte-inicio .row{
-    width: 100%;
-}
-.ctn-opcion-reporte-inicio select{
-    margin-right: 20px;
-}
 
 /* ---------------------------------------------------
     CONTENT STYLE
@@ -333,8 +329,5 @@ input[type="file"] {
     }
     #sidebar {
         margin-left: 0;
-    }
-    #sidebarCollapse span {
-        display: none;
     }
 }

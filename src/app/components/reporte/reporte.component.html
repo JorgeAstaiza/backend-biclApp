@@ -7,7 +7,7 @@
     </div>
     <ul class="list-unstyled components">
       <li>
-        <a href="index.html" class="dropdown-toggle">
+        <a routerLink="/inicio" class="dropdown-toggle">
           <i class="fas fa-key"></i>
           Inicio
         </a>
@@ -27,7 +27,7 @@
         </ul>
       </li>
       <li >
-        <a routerLink="/reporte" class="dropdown-toggle">
+        <a href="#" class="dropdown-toggle">
           <i class="fas fa-chart-area"></i>
           Reporte completo
         </a>
@@ -68,11 +68,10 @@
       </div>
     </nav>
 
-    <h2>Reportes</h2>
+    <h2>Reporte completo</h2>
     <form>
       <div class="ctn-opcion-reporte-inicio container">
         <div class="row">
-          <p class="col-3">Personaliza tu top 5: </p>
           <div class="input-group mb-3">
             <div class="input-group-prepend">
               <label class="input-group-text" for="inputGroupSelect01">Poblacion</label>
@@ -80,6 +79,27 @@
             <select class="custom-select" id="poblacion">
               <option *ngFor="let usuario of poblacion">
                 {{usuario}}
+              </option>
+            </select>
+          </div>
+
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="inputGroupSelect01">Carrera</label>
+            </div>
+            <select class="custom-select" id="carrera">
+              <option *ngFor="let carrera of carreras">
+                {{carrera}}
+              </option>
+            </select>
+          </div>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="inputGroupSelect01">Semestre</label>
+            </div>
+            <select class="custom-select" id="semestre">
+              <option *ngFor="let semestre of semestres">
+                {{semestre}}
               </option>
             </select>
           </div>
@@ -95,12 +115,7 @@
           </div>
         </div>
       </div>
-    </form>
-    <canvas baseChart
-      [datasets]= "barChartData"
-      [labels]= "barChartLabels"
-      [options]= "barChartOptions"
-      [legend]= "barChartLegend"
-      [chartType]= "barChartType"></canvas>    
+      <button class="btn btn-primary">Generar</button>
+    </form> 
   </div>
 </div>

@@ -1,0 +1,144 @@
+<div class="wrapper">
+  <!-- Sidebar  -->
+  <nav id="sidebar">
+    <div class="sidebar-header">
+      <img class="logo" src="../../../assets/imagenes/Uni.png" alt="Autonoma del Cauca">
+    </div>
+
+    <ul class="list-unstyled components">
+      <li>
+        <a routerLink="/inicio" class="dropdown-toggle">
+          <i class="fas fa-key"></i>
+          Inicio
+        </a>
+      </li>
+      <li>
+        <a href="#usuarios" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+          <i class="fas fa-users"></i>
+          Registrar usuario
+        </a>
+        <ul class="collapse list-unstyled" id="usuarios">
+          <li>
+            <a routerLink="/registrar-usuario">Registrar</a>
+          </li>
+          <li>
+            <a href="#">Listar usuarios</a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a routerLink="/reporte" class="dropdown-toggle">
+          <i class="fas fa-chart-area"></i>
+          Reporte completo
+        </a>
+      </li>
+      <li>
+        <a href="#incentivos" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+          <i class="fas fa-briefcase"></i>
+          Incentivos
+        </a>
+        <ul class="collapse list-unstyled" id="incentivos">
+          <li>
+            <a routerLink="/crear-incentivo">Crear un incentivo</a>
+          </li>
+          <li>
+            <a href="#">Listar incentivos</a>
+          </li>
+        </ul>
+        <a href="autorizaciones.html" class="dropdown-toggle">
+          <i class="fas fa-key"></i>
+          Autorizaciones
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <i class="fas fa-image"></i>
+          Cerrar Sesion
+        </a>
+      </li>
+      </ul>
+  </nav>
+
+  <div id="content">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <p>Bienvenido al Team Bike /</p> <p>Crear Incentivo</p> 
+      </div>
+    </nav>
+    <div class="contenedor-formulario">
+      <form class="form-crear-incentivo">
+        <h1 class="titulo-login">Ingresar incentivo</h1>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+           <label for="titulo-incentivo">Titulo del incentivo *</label>
+           <input type="text" class="form-control" id="titulo-incentivo" placeholder="Titulo del incentivo">
+          </div>
+          <div class="form-group col-md-6">
+           <label>Responsable *</label>
+           <input type="text" class="form-control" placeholder="Persona a cargo">
+          </div>
+        </div>
+        <label class="lb-incentivo">El incentivo va dirigido a: *</label>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1" (click)="visibleEstudiantes()">
+          <label class="form-check-label" for="inlineCheckbox1">Estudiantes</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
+          <label class="form-check-label" for="inlineCheckbox2">Docentes</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3" >
+          <label class="form-check-label" for="inlineCheckbox3">Administrativos</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3">
+          <label class="form-check-label" for="inlineCheckbox3">Otros</label>
+        </div>
+        <div class="input-group mb-3" [ngStyle]="{display: (chekeado) ? 'flex': 'none'}">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="inputGroupSelect01">Semestre</label>
+          </div>
+          <select class="custom-select" id="inputGroupSemestres">
+            <option selected>Seleccionar</option>
+            <option *ngFor="let semestre of semestres">
+              {{semestre}}
+            </option>
+          </select>
+        </div>
+        <div class="input-group mb-3" [ngStyle]="{display: (chekeado) ? 'flex': 'none'}">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="inputGroupSelect01">Carrera</label>
+          </div>
+          <select class="custom-select" id="inputGroupCarreras">
+            <option selected>Seleccionar</option>
+            <option *ngFor="let carrera of carreras">
+              {{carrera}}
+            </option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="lb-decripcion">Descripcion *</label>
+          <textarea class="form-control" id="validationTextarea" placeholder="Describe que tipo de incentivo se dara" required></textarea>
+        </div>
+        <div class="form-group row">
+          <label for="example-datetime-local-input" class="col-2 col-form-label">Fecha de inicio *</label>
+          <div class="col-10">
+            <input class="form-control" type="datetime-local" value="2011-08-19T13:45:00" id="example-datetime-local-input">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="example-datetime-local-input" class="col-2 col-form-label">Fecha de fin *</label>
+          <div class="col-10">
+            <input class="form-control" type="datetime-local" value="2011-08-19T13:45:00" id="example-datetime-local-input">
+          </div>
+        </div>
+        <div class="ctn-btn-guardar-incentivo">
+          <button type="submit" class="btn btn-primary">Guardar incentivo</button>
+        </div>
+       </form>
+    
+    </div>
+  </div>
+</div>

@@ -1,0 +1,245 @@
+<div class="wrapper">
+  <!-- Sidebar  -->
+  <nav id="sidebar">
+    <div class="sidebar-header">
+      <img class="logo" src="../../../assets/imagenes/Uni.png" alt="Autonoma del Cauca">
+    </div>
+
+    <ul class="list-unstyled components">
+      <li>
+        <a routerLink="/inicio" class="dropdown-toggle">
+          <i class="fas fa-key"></i>
+          Inicio
+        </a>
+      </li>
+      <li>
+        <a href="#usuarios" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+          <i class="fas fa-users"></i>
+          Registrar usuario
+        </a>
+        <ul class="collapse list-unstyled" id="usuarios">
+          <li>
+            <a routerLink="/registrar-usuario">Registrar</a>
+          </li>
+          <li>
+            <a href="#">Listar usuarios</a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a routerLink="/reporte" class="dropdown-toggle">
+          <i class="fas fa-chart-area"></i>
+          Reporte completo
+        </a>
+      </li>
+      <li>
+        <a href="#incentivos" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+          <i class="fas fa-briefcase"></i>
+          Incentivos
+        </a>
+        <ul class="collapse list-unstyled" id="incentivos">
+          <li>
+            <a routerLink="/crear-incentivo">Crear un incentivo</a>
+          </li>
+          <li>
+            <a href="#">Listar incentivos</a>
+          </li>
+        </ul>
+        <a href="autorizaciones.html" class="dropdown-toggle">
+          <i class="fas fa-key"></i>
+          Autorizaciones
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <i class="fas fa-image"></i>
+          Cerrar Sesion
+        </a>
+      </li>
+      </ul>
+  </nav>
+
+  <!-- Page Content  -->
+  <div id="content">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <p>Bienvenido al Team Bike /</p> <p>Registrar Usuario</p> 
+      </div>
+    </nav>
+    <div class="contenedor-formulario">
+        <form class="form-registrar-usuario">
+          <h1 class="titulo-login">Registrar Usuario</h1>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="nombre-usuario">Nombres</label>
+              <input type="text" class="form-control" id="nombre-usuario" placeholder="Nombre(s)">
+            </div>
+            <div class="form-group col-md-6">
+              <label>Apellido</label>
+              <input type="text" class="form-control" placeholder="Apellido(s)">
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="inputGroupSelect01">Tipo de usuario</label>
+              </div>
+              <select [(ngModel)]="opcionSeleccionado" (change)="capturar()" class="custom-select" id="inputGroupUsers" name="usuarios">
+                <option selected value="0">Seleccionar</option>
+                <option *ngFor="let usuario of poblacion" >
+                  {{usuario}}
+                </option>
+              </select>
+              <!--<p [hidden]="opcionSeleccionado == 0">Haz seleccionado la opcion {{verSeleccion}} </p>-->
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="inputGroupSelect01">Tipo de identificacion</label>
+              </div>
+              <select class="custom-select" id="inputGroupIds">
+                <option selected>Seleccionar</option>
+                <option *ngFor="let id of identificacion" >
+                  {{id}}
+                </option>
+              </select>
+            </div>
+            <div class="input-group mb-3" [ngStyle]="{display: (visible) ? 'flex': 'none'}">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="inputGroupSelect01">Semestre</label>
+              </div>
+              <select class="custom-select" id="inputGroupSemestres">
+                <option selected>Seleccionar</option>
+                <option *ngFor="let semestre of semestres">
+                  {{semestre}}
+                </option>
+              </select>
+            </div>
+            <div class="input-group mb-3" [ngStyle]="{display: (visible) ? 'flex': 'none'}">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="inputGroupSelect01">Carrera</label>
+              </div>
+              <select class="custom-select" id="inputGroupCarreras">
+                <option selected>Seleccionar</option>
+                <option *ngFor="let carrera of carreras">
+                  {{carrera}}
+                </option>
+              </select>
+            </div>
+            <label>Numero de identificacion</label>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+              </div>
+              <input type="number" class="form-control" placeholder="Numero de identificacion">
+            </div>
+            </div>
+          
+          <div class="form-group">
+            <label>Correo Electronico</label>
+            <div class="input-group mb-3">	
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1"><i class="fas fa-envelope"></i></span>
+              </div>
+              <input type="email" class="form-control" placeholder="Correo electronico" aria-label="email"
+                aria-describedby="basic-addon1">
+            </div>
+          </div>
+          <div class="ctn-genero-usuario">
+            <label class="lb-incentivo">Selecciona un genero:</label>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+              <label class="form-check-label" for="inlineRadio1">Hombre</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+              <label class="form-check-label" for="inlineRadio2">Mujer</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">
+              <label class="form-check-label" for="inlineRadio3">Otro</label>
+            </div>
+          </div>
+          <div class="container-fluid ctn-btns-usario-bici" id="main-content">
+              <div class="container">
+                <div class="row">
+                  <div class="col-5 ctn-foto-usuario">
+                    <label for="file-upload" class="custom-file-upload">
+                      <i class="fa fa-cloud-upload"></i> Subir foto de usuario
+                    </label>
+                    <input id="file-upload" type="file" />
+                  </div>
+                  <div class="col-5 ctn-foto-bicicleta">
+                    <button type="button" class="btn btn-outline-secondary btn-subir-bici" data-toggle="modal" data-target="#exampleModal">
+                      Informacion de la bicicleta
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <div class="ctn-btn-registrar-usuario">
+            <button type="submit" class="btn btn-primary">Registrar Usuario</button>
+          </div>
+        </form>
+    </div>
+  </div>
+  
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+     <div class="modal-header">
+      <h5 class="modal-title" id="exampleModalLabel">Registro de Bicicleta</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+     </div>
+     <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="color-bici">Color</label>
+          <input type="text" class="form-control" id="color-bici" placeholder="Color(es) de la bicicleta">
+        </div>
+        <div class="form-group col-md-6">
+          <label>Marca</label>
+          <input type="text" class="form-control" placeholder="Marca del marco">
+        </div>
+        <div class="form-group col-md-6">
+          <label>Serial</label>
+          <input type="text" class="form-control" placeholder="Serial del marco">
+        </div>
+      </div>
+      <div class="ctn-tipo-bicicleta">
+        <label class="lb-incentivo">Selecciona tipo de la bicicleta:</label>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+          <label class="form-check-label" for="inlineRadio1">Ruta</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+          <label class="form-check-label" for="inlineRadio2">Todo Terreno</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">
+          <label class="form-check-label" for="inlineRadio3">BiciCross</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">
+          <label class="form-check-label" for="inlineRadio3">Otro</label>
+        </div>
+      </div>
+      
+      <label for="file-upload" class="custom-file-upload lb-foto-bicicleta">
+        <i class="fa fa-cloud-upload"></i> Subir foto de bicicleta
+      </label>
+      <input id="file-upload" type="file" />
+     </div>
+     <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+      <button type="button" class="btn btn-primary">Registrar bicicleta</button>
+     </div>
+    </div>
+  </div>
+ </div>
