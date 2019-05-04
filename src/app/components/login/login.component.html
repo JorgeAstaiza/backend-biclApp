@@ -7,8 +7,7 @@
         <div class="input-group-prepend">
           <span class="input-group-text" id="basic-addon1"><i class="fas fa-user"></i></span>
         </div>
-        <input type="text" class="form-control" placeholder="Nombre de usuario" aria-label="Username"
-          aria-describedby="basic-addon1">
+        <input type="email" class="form-control" placeholder="Correo" [(ngModel)]="loginParams.email" name="email">
       </div>
     </div>
     <div class="form-group">
@@ -16,12 +15,11 @@
         <div class="input-group-prepend">
           <span class="input-group-text" id="basic-addon1"><i class="fas fa-key"></i></span>
         </div>
-        <input type="text" class="form-control" placeholder="Contraseña" aria-label="Username"
-          aria-describedby="basic-addon1">
+        <input type="password" class="form-control" placeholder="Contraseña" [(ngModel)]="loginParams.password" name="password">
       </div>
     </div>
     <div class="contedor-btn-iniciar">
-      <a routerLink="/inicio"><button type="submit" class="btn btn-iniciar btn-primary btn-lg">Iniciar Sesion</button></a> 
+      <a (click)="login()" routerLink="/inicio"><button type="submit" class="btn btn-iniciar btn-primary btn-lg">Iniciar Sesion</button></a> 
     </div>
     <div class="contenedor-no-registrado">
       <p class="txt-no-registrado">¿No tienes una cuenta? </p>

@@ -1,0 +1,136 @@
+<div class="wrapper">
+  <!-- Sidebar  -->
+  <nav id="sidebar">
+    <div class="sidebar-header">
+      <img class="logo" src="../../../assets/imagenes/Uni.png" alt="">
+      <img class="logo-reducido" src="img/logo-reducido.png" alt="">
+    </div>
+    <ul class="list-unstyled components">
+      <li>
+        <a href="index.html" class="dropdown-toggle">
+          <i class="fas fa-key"></i>
+          Inicio
+        </a>
+      </li>
+      <li>
+        <a href="#usuarios" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+          <i class="fas fa-users"></i>
+          Registrar usuario
+        </a>
+        <ul class="collapse list-unstyled" id="usuarios">
+          <li>
+            <a routerLink="/registrar-usuario">Registrar</a>
+          </li>
+          <li>
+            <a routerLink="/listar-usuarios">Listar usuarios</a>
+          </li>
+        </ul>
+      </li>
+      <li >
+        <a routerLink="/reporte" class="dropdown-toggle">
+          <i class="fas fa-chart-area"></i>
+          Reporte completo
+        </a>
+      </li>
+      <li>
+        <a href="#incentivos" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+          <i class="fas fa-briefcase"></i>
+          Incentivos
+        </a>
+        <ul class="collapse list-unstyled" id="incentivos">
+          <li>
+            <a routerLink="/crear-incentivo">Crear un incentivo</a>
+          </li>
+          <li>
+            <a href="#">Listar incentivos</a>
+          </li>
+        </ul>
+        <a href="autorizaciones.html" class="dropdown-toggle">
+          <i class="fas fa-key"></i>
+          Autorizaciones
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <i class="fas fa-image"></i>
+          Cerrar Sesion
+        </a>
+      </li>
+    </ul>
+  </nav>
+  
+  <!-- Page Content  -->
+  <div id="content">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <p>Bienvenido al Team Bike</p>
+      </div>
+    </nav>
+    <div class="form-group">
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            <div class="input-group mb-3">	
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1"><i class="far fa-id-badge"></i>Identificacion</span>
+              </div>
+              <input type="email" class="form-control" placeholder="Codigo o cedula" aria-label="email"
+                aria-describedby="basic-addon1">
+            </div>
+          </div>
+          <div class="col btn-consultar-usuario">
+            <a href="">Consultar</a>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col">Nombre</div>
+        <div class="col">Carrera</div>
+        <div class="col">Semestre</div>
+        <div class="col">Codigo</div>
+        <div class="col">Acciones</div>
+
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col">Jorge Alexander Astaiza Cordoba</div>
+        <div class="col">Ingenieria Sistemas Informaticos</div>
+        <div class="col">X</div>
+        <div class="col">000008693</div>
+        <div class="col btns">
+          <a href="" class="btn-editar"><i class="fas fa-edit"></i>Editar</a>
+          <a href="" class="btn-eliminar"><i class="far fa-trash-alt"></i>Eliminar</a>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col">Mike Sthepen Ceron Henandez</div>
+        <div class="col">Ingenieria Sistemas Informaticos</div>
+        <div class="col">X</div>
+        <div class="col">000001234</div>
+        <div class="col btns">
+          <a href="" class="btn-editar"><i class="fas fa-edit"></i>Editar</a>
+          <a href="" class="btn-eliminar"><i class="far fa-trash-alt"></i>Eliminar</a>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col">Jessica Lorena Zuñiga Mamian</div>
+        <div class="col">Derecho</div>
+        <div class="col">V</div>
+        <div class="col">000001223</div>
+        <div class="col btns">
+          <a href="" class="btn-editar"><i class="fas fa-edit"></i>Editar</a>
+          <a href="" class="btn-eliminar"><i class="far fa-trash-alt"></i>Eliminar</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

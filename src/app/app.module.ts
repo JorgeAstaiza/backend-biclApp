@@ -14,15 +14,27 @@ import { ChartsModule } from 'ng2-charts';
 import { RegistrarUsuarioComponent } from './components/registrar-usuario/registrar-usuario.component';
 import { IncentivosComponent } from './components/incentivos/incentivos.component';
 import { ReporteComponent } from './components/reporte/reporte.component'
+//servicio
+import { AutorizacionService } from './services/autorizacion.service';
+//firebase
+import { AngularFireModule } from '@angular/fire';
+import { AngularFireDatabaseModule } from '@angular/fire/database';
+import { AngularFireAuth, AngularFireAuthModule } from '@angular/fire/auth'
+import { environment } from '../environments/environment';
+import { ListarUsuariosComponent } from './components/listar-usuarios/listar-usuarios.component';
+import { ListarIncentivosComponent } from './components/listar-incentivos/listar-incentivos.component';
+import { GuardService } from './services/guard.service';
 
 
 const routes: Route[] = [
   {path: '', component: LoginComponent},
   {path: 'registrarse', component: RegistrarseComponent},
-  {path: 'inicio', component: InicioComponent},
-  {path: 'registrar-usuario', component: RegistrarUsuarioComponent},
-  {path: 'crear-incentivo', component: IncentivosComponent},
-  {path: 'reporte', component: ReporteComponent}
+  {path: 'inicio', component: InicioComponent, canActivate:[GuardService]},
+  {path: 'registrar-usuario', component: RegistrarUsuarioComponent, canActivate:[GuardService]},
+  {path: 'crear-incentivo', component: IncentivosComponent, canActivate:[GuardService]},
+  {path: 'reporte', component: ReporteComponent, canActivate:[GuardService]},
+  {path: 'listar-usuarios', component: ListarUsuariosComponent, canActivate:[GuardService]},
+  {path: 'listar-incentivos', component: ListarIncentivosComponent, canActivate:[GuardService]}
 ]
 
 @NgModule({
@@ -33,7 +45,9 @@ const routes: Route[] = [
     LoginComponent,
     RegistrarUsuarioComponent,
     IncentivosComponent,
-    ReporteComponent
+    ReporteComponent,
+    ListarUsuariosComponent,
+    ListarIncentivosComponent
   ],
   imports: [
     BrowserModule,
@@ -41,9 +55,12 @@ const routes: Route[] = [
     RouterModule.forRoot(routes),
     ChartsModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    AngularFireModule.initializeApp(environment.config),
+    AngularFireDatabaseModule,
+    AngularFireAuthModule
   ],
-  providers: [],
+  providers: [AutorizacionService, GuardService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
