@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AutorizacionService } from 'src/app/services/autorizacion.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -8,10 +9,19 @@ import { AutorizacionService } from 'src/app/services/autorizacion.service';
 })
 export class LoginComponent implements OnInit {
   loginParams:any = {};
-  constructor(private autorizacionService: AutorizacionService) {
+  email: string = null;
+  password: string = null;
+  constructor(private autorizacionService: AutorizacionService, private router: Router) {
    }
    login(){
-    this.autorizacionService.login(this.loginParams.email, this.loginParams.password);
+    this.autorizacionService.login(this.email, this.password).then((data)=>{
+      alert('logeado correctamente');
+      this.router.navigate(['inicio']);
+      console.log(data);
+    }).catch((err)=>{
+      alert('a ocurrido un err');
+      console.log(err)
+    })
    }
 
   ngOnInit() {

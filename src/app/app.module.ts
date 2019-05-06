@@ -23,18 +23,18 @@ import { AngularFireAuth, AngularFireAuthModule } from '@angular/fire/auth'
 import { environment } from '../environments/environment';
 import { ListarUsuariosComponent } from './components/listar-usuarios/listar-usuarios.component';
 import { ListarIncentivosComponent } from './components/listar-incentivos/listar-incentivos.component';
-import { GuardService } from './services/guard.service';
+import { AutenticacionGuard } from './services/autenticacion.guard';
 
 
 const routes: Route[] = [
   {path: '', component: LoginComponent},
   {path: 'registrarse', component: RegistrarseComponent},
-  {path: 'inicio', component: InicioComponent, canActivate:[GuardService]},
-  {path: 'registrar-usuario', component: RegistrarUsuarioComponent, canActivate:[GuardService]},
-  {path: 'crear-incentivo', component: IncentivosComponent, canActivate:[GuardService]},
-  {path: 'reporte', component: ReporteComponent, canActivate:[GuardService]},
-  {path: 'listar-usuarios', component: ListarUsuariosComponent, canActivate:[GuardService]},
-  {path: 'listar-incentivos', component: ListarIncentivosComponent, canActivate:[GuardService]}
+  {path: 'inicio', component: InicioComponent, canActivate:[AutenticacionGuard]},
+  {path: 'registrar-usuario', component: RegistrarUsuarioComponent, canActivate:[AutenticacionGuard]},
+  {path: 'crear-incentivo', component: IncentivosComponent, canActivate:[AutenticacionGuard]},
+  {path: 'reporte', component: ReporteComponent, canActivate:[AutenticacionGuard]},
+  {path: 'listar-usuarios', component: ListarUsuariosComponent, canActivate:[AutenticacionGuard]},
+  {path: 'listar-incentivos', component: ListarIncentivosComponent, canActivate:[AutenticacionGuard]}
 ]
 
 @NgModule({
@@ -60,7 +60,7 @@ const routes: Route[] = [
     AngularFireDatabaseModule,
     AngularFireAuthModule
   ],
-  providers: [AutorizacionService, GuardService],
+  providers: [AutorizacionService, AutenticacionGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

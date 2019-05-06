@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AutorizacionService } from 'src/app/services/autorizacion.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-inicio',
@@ -22,11 +24,18 @@ export class InicioComponent implements OnInit {
     {data: [29, 48, 19, 86, 90], label: 'Seires B'}
   ];
 
-  constructor() {
+  constructor(private autorizacionServices: AutorizacionService, private router: Router) {
     this.poblacion=['Estudiante', 'Docente', 'Administrativo', 'Otro'];
     this.tiempo=['Top de la semana', 'Top del mes', 'Top del semestre'];
    }
 
+   logout(){
+     this.autorizacionServices.logOut().then(()=>{
+       this.router.navigate([''])
+     }).catch((err)=>{
+       console.log(err);
+     });
+   }
   ngOnInit() {
   }
 
