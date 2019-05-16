@@ -7,7 +7,7 @@
     </div>
     <ul class="list-unstyled components">
       <li>
-        <a href="index.html" class="dropdown-toggle">
+        <a routerLink="/inicio" class="dropdown-toggle">
           <i class="fas fa-key"></i>
           Inicio
         </a>
@@ -42,7 +42,7 @@
             <a routerLink="/crear-incentivo">Crear un incentivo</a>
           </li>
           <li>
-            <a href="#">Listar incentivos</a>
+            <a routerLink="/listar-incentivos">Listar incentivos</a>
           </li>
         </ul>
         <a href="autorizaciones.html" class="dropdown-toggle">
@@ -51,7 +51,7 @@
         </a>
       </li>
       <li>
-        <a href="#">
+        <a (click)="logout()">
           <i class="fas fa-image"></i>
           Cerrar Sesion
         </a>
@@ -98,38 +98,34 @@
     </div>
     <div class="container">
       <div class="row">
-        <div class="col">Jorge Alexander Astaiza Cordoba</div>
-        <div class="col">Ingenieria Sistemas Informaticos</div>
-        <div class="col">X</div>
-        <div class="col">000008693</div>
-        <div class="col btns">
-          <a href="" class="btn-editar"><i class="fas fa-edit"></i>Editar</a>
-          <a href="" class="btn-eliminar"><i class="far fa-trash-alt"></i>Eliminar</a>
+        <div class="datos" *ngFor="let user of userList">
+          <div class="col">
+            <ul class="campo" >
+              <li>{{user.nombre}} {{user.apellido}}</li>
+            </ul>
+          </div>
+          <div class="col">
+            <ul class="campo" >
+              <li>{{user.carrera}}</li>
+            </ul>
+          </div>
+          <div class="col">
+            <ul class="campo" >
+              <li>{{user.semestre}}</li>
+            </ul>
+          </div>
+          <div class="col">
+            <ul class="campo" >
+              <li>{{user.id}}</li>
+            </ul>
+          </div>
+          <div class="col btns">
+            <button class="btn btn-success" (click)="onEdit(user)"><i class="fas fa-edit"></i>Editar</button>
+            <button class="btn btn-danger" (click)="onDelete(user.$key)"><i class="far fa-trash-alt"></i>Eliminar</button>
+            <button class="btn btn-primary"> <a routerLink="/codeqr"><i class="fas fa-qrcode"></i>Generar QR</a></button>
+          </div>
         </div>
-      </div>
-    </div>
-    <div class="container">
-      <div class="row">
-        <div class="col">Mike Sthepen Ceron Henandez</div>
-        <div class="col">Ingenieria Sistemas Informaticos</div>
-        <div class="col">X</div>
-        <div class="col">000001234</div>
-        <div class="col btns">
-          <a href="" class="btn-editar"><i class="fas fa-edit"></i>Editar</a>
-          <a href="" class="btn-eliminar"><i class="far fa-trash-alt"></i>Eliminar</a>
-        </div>
-      </div>
-    </div>
-    <div class="container">
-      <div class="row">
-        <div class="col">Jessica Lorena Zuñiga Mamian</div>
-        <div class="col">Derecho</div>
-        <div class="col">V</div>
-        <div class="col">000001223</div>
-        <div class="col btns">
-          <a href="" class="btn-editar"><i class="fas fa-edit"></i>Editar</a>
-          <a href="" class="btn-eliminar"><i class="far fa-trash-alt"></i>Eliminar</a>
-        </div>
+        
       </div>
     </div>
   </div>

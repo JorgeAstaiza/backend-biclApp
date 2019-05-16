@@ -213,6 +213,7 @@ a.article:hover {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-wrap: wrap;
 }
 .btn-consultar-usuario{
     display: flex;
@@ -224,7 +225,15 @@ a.article:hover {
     padding: 5px;
     border-radius: 7px;
 }
-
+.campo{
+    height: 70px;
+    display: flex;
+    align-items: center;
+}
+.datos{
+    display: flex;
+    width: 100%;
+}
 #content {
     width: 100%;
     padding: 20px;

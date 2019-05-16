@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AutorizacionService } from 'src/app/services/autorizacion.service';
-import { UsersService } from 'src/app/services/users.service';
+import { AdminService } from 'src/app/services/admin.service';
 
 @Component({
   selector: 'app-registrarse',
@@ -11,17 +11,17 @@ export class RegistrarseComponent implements OnInit {
   email: string = null;
   password: string = null;
   nick: string = null;
-  constructor(private autorizacionService: AutorizacionService, private userServices: UsersService) {
+  constructor(private autorizacionService: AutorizacionService, private adminService: AdminService) {
     
    }
    registrar(){
     this.autorizacionService.registro(this.email, this.password).then((data)=>{
-      const user = {
+      const admin = {
         uid: data.user.uid,
         email: this.email,
         nick: this.nick
       };
-      this.userServices.createUser(user).then((data2)=>{
+      this.adminService.createAdmin(admin).then((data2)=>{
         alert('usuario registrado correctamente');
         console.log(data2);
       }).catch((err2)=>{

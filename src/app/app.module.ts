@@ -20,10 +20,19 @@ import { AutorizacionService } from './services/autorizacion.service';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFireAuth, AngularFireAuthModule } from '@angular/fire/auth'
+import { AngularFireStorageModule } from '@angular/fire/storage'
+
 import { environment } from '../environments/environment';
 import { ListarUsuariosComponent } from './components/listar-usuarios/listar-usuarios.component';
 import { ListarIncentivosComponent } from './components/listar-incentivos/listar-incentivos.component';
 import { AutenticacionGuard } from './services/autenticacion.guard';
+import { CrudService } from './services/crud.service';
+import { CodeqrComponent } from './components/codeqr/codeqr.component';
+// generador codigo qr
+import { NgxQRCodeModule } from 'ngx-qrcode2'
+// cortar imagenes
+import { ImageCropperModule } from 'ngx-image-cropper';
+import { RegistrarBicicletaComponent } from './components/registrar-bicicleta/registrar-bicicleta.component';
 
 
 const routes: Route[] = [
@@ -34,7 +43,9 @@ const routes: Route[] = [
   {path: 'crear-incentivo', component: IncentivosComponent, canActivate:[AutenticacionGuard]},
   {path: 'reporte', component: ReporteComponent, canActivate:[AutenticacionGuard]},
   {path: 'listar-usuarios', component: ListarUsuariosComponent, canActivate:[AutenticacionGuard]},
-  {path: 'listar-incentivos', component: ListarIncentivosComponent, canActivate:[AutenticacionGuard]}
+  {path: 'listar-incentivos', component: ListarIncentivosComponent, canActivate:[AutenticacionGuard]},
+  {path: 'codeqr', component: CodeqrComponent, canActivate:[AutenticacionGuard]}
+
 ]
 
 @NgModule({
@@ -47,7 +58,9 @@ const routes: Route[] = [
     IncentivosComponent,
     ReporteComponent,
     ListarUsuariosComponent,
-    ListarIncentivosComponent
+    ListarIncentivosComponent,
+    CodeqrComponent,
+    RegistrarBicicletaComponent
   ],
   imports: [
     BrowserModule,
@@ -58,9 +71,12 @@ const routes: Route[] = [
     ReactiveFormsModule,
     AngularFireModule.initializeApp(environment.config),
     AngularFireDatabaseModule,
-    AngularFireAuthModule
+    AngularFireAuthModule,
+    AngularFireStorageModule,
+    NgxQRCodeModule,
+    ImageCropperModule
   ],
-  providers: [AutorizacionService, AutenticacionGuard],
+  providers: [AutorizacionService, AutenticacionGuard, CrudService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

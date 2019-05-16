@@ -22,7 +22,7 @@
             <a routerLink="/registrar-usuario">Registrar</a>
           </li>
           <li>
-            <a href="#">Listar usuarios</a>
+            <a routerLink="/listar-usuario">Listar usuarios</a>
           </li>
         </ul>
       </li>
@@ -42,7 +42,7 @@
             <a routerLink="/crear-incentivo">Crear un incentivo</a>
           </li>
           <li>
-            <a href="#">Listar incentivos</a>
+            <a routerLink="/listar-incentivos">Listar incentivos</a>
           </li>
         </ul>
         <a href="autorizaciones.html" class="dropdown-toggle">
@@ -51,12 +51,12 @@
         </a>
       </li>
       <li>
-        <a href="#">
+        <a (click)="logout()">
           <i class="fas fa-image"></i>
           Cerrar Sesion
         </a>
       </li>
-      </ul>
+    </ul>
   </nav>
 
   <!-- Page Content  -->
@@ -68,16 +68,16 @@
       </div>
     </nav>
     <div class="contenedor-formulario">
-        <form class="form-registrar-usuario">
+        <form class="form-registrar-usuario" #userForm="ngForm" (ngSubmit)="onSubmit(userForm)">
           <h1 class="titulo-login">Registrar Usuario</h1>
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="nombre-usuario">Nombres</label>
-              <input type="text" class="form-control" id="nombre-usuario" placeholder="Nombre(s)">
+              <input type="text" class="form-control" id="nombre-usuario" placeholder="Nombre(s)" name="nombre" #nombre="ngModel" [(ngModel)]="crudService.selectUser.nombre">
             </div>
             <div class="form-group col-md-6">
               <label>Apellido</label>
-              <input type="text" class="form-control" placeholder="Apellido(s)">
+              <input type="text" class="form-control" placeholder="Apellido(s)" name="apellido" #apellido="ngModel" [(ngModel)]="crudService.selectUser.apellido">
             </div>
           </div>
           <div class="form-group">
@@ -85,55 +85,85 @@
               <div class="input-group-prepend">
                 <label class="input-group-text" for="inputGroupSelect01">Tipo de usuario</label>
               </div>
-              <select [(ngModel)]="opcionSeleccionado" (change)="capturar()" class="custom-select" id="inputGroupUsers" name="usuarios">
+              <select [(ngModel)]="tipoSeleccionado" (change)="capturar()" class="custom-select" id="inputGroupUsers" name="tipo">
                 <option selected value="0">Seleccionar</option>
                 <option *ngFor="let usuario of poblacion" >
                   {{usuario}}
                 </option>
               </select>
-              <!--<p [hidden]="opcionSeleccionado == 0">Haz seleccionado la opcion {{verSeleccion}} </p>-->
+              <div *ngIf="tipoSeleccionado" style="display: none;">
+                <input type="text" value="{{tipoSeleccionado}}" name="tipo" #tipo="ngModel" [(ngModel)]="crudService.selectUser.tipo">
+              </div>
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="inputGroupSelect01">Genero</label>
+              </div>
+              <select [(ngModel)]="generoSeleccionado" (change)="generoUsuario()" class="custom-select" id="inputGroupUsers" name="genero">
+                <option selected value="0">Seleccionar</option>
+                <option *ngFor="let sexo of genero" >
+                  {{sexo}}
+                </option>
+              </select>
+              <div *ngIf="generoSeleccionado" style="display:none">
+                <input type="text" value="{{generoSeleccionado}}" name="genero" #genero="ngModel" [(ngModel)]="crudService.selectUser.genero">
+              </div>
             </div>
             <div class="input-group mb-3">
               <div class="input-group-prepend">
                 <label class="input-group-text" for="inputGroupSelect01">Tipo de identificacion</label>
               </div>
-              <select class="custom-select" id="inputGroupIds">
+              <select class="custom-select" id="inputGroupIds" [(ngModel)]="idSeleccionado" (change)="idUsuario()" name="identificacion">
                 <option selected>Seleccionar</option>
-                <option *ngFor="let id of identificacion" >
+                <option *ngFor="let id of identificaciones" >
                   {{id}}
                 </option>
               </select>
+              <div *ngIf="idSeleccionado" style="display: none;">
+                <input type="text" value="{{idSeleccionado}}" name="identificacion" #identificacion="ngModel" [(ngModel)]="crudService.selectUser.identificacion">
+              </div>
             </div>
             <div class="input-group mb-3" [ngStyle]="{display: (visible) ? 'flex': 'none'}">
               <div class="input-group-prepend">
                 <label class="input-group-text" for="inputGroupSelect01">Semestre</label>
               </div>
-              <select class="custom-select" id="inputGroupSemestres">
+              <select class="custom-select" id="inputGroupSemestres" [(ngModel)]="semestreSeleccionado" (change)="semestreUsuario()" name="semestre">
                 <option selected>Seleccionar</option>
                 <option *ngFor="let semestre of semestres">
                   {{semestre}}
                 </option>
               </select>
+              <div *ngIf="semestreSeleccionado" style="display: none;">
+                <input type="text" value="{{semestreSeleccionado}}" name="semestre" #semestre="ngModel" [(ngModel)]="crudService.selectUser.semestre">
+              </div>
             </div>
             <div class="input-group mb-3" [ngStyle]="{display: (visible) ? 'flex': 'none'}">
               <div class="input-group-prepend">
                 <label class="input-group-text" for="inputGroupSelect01">Carrera</label>
               </div>
-              <select class="custom-select" id="inputGroupCarreras">
+              <select class="custom-select" id="inputGroupCarreras" [(ngModel)]="carreraSeleccionada" (change)="carreraUsuario()" name="carrera">
                 <option selected>Seleccionar</option>
                 <option *ngFor="let carrera of carreras">
                   {{carrera}}
                 </option>
               </select>
+              <div *ngIf="carreraSeleccionada" style="display: none;">
+                <input type="text" value="{{carreraSeleccionada}}" name="carrera" #carrera="ngModel" [(ngModel)]="crudService.selectUser.carrera">
+              </div>
             </div>
             <label>Numero de identificacion</label>
             <div class="input-group mb-3">
               <div class="input-group-prepend">
                 <span class="input-group-text"><i class="fas fa-id-card"></i></span>
               </div>
-              <input type="number" class="form-control" placeholder="Numero de identificacion">
+              <input type="number" class="form-control" placeholder="Numero de identificacion" name="identificacion" #identificacion="ngModel" [(ngModel)]="crudService.selectUser.identificacion">
+              <!--
+              <div *ngIf="crudService.selectUser.identificacion">
+                <input type="password" value="{{crudService.selectUser.identificacion}}" name="password" [(ngModel)]="userPassword">
+              </div>
+              -->
             </div>
-          </div>
+          </div> 
           
           <div class="form-group">
             <label>Correo Electronico</label>
@@ -141,23 +171,20 @@
               <div class="input-group-prepend">
                 <span class="input-group-text" id="basic-addon1"><i class="fas fa-envelope"></i></span>
               </div>
-              <input type="email" class="form-control" placeholder="Correo electronico" aria-label="email"
-                aria-describedby="basic-addon1">
+              <input type="email" class="form-control" placeholder="Correo electronico" name="email" #email="ngModel" [(ngModel)]="crudService.selectUser.email" (change)="emailUser()">
+              <div *ngIf="crudService.selectUser.email" style="display: none;">
+                <input type="email" value="{{crudService.selectUser.email}}" name="emailUs" [(ngModel)]="emailUs">
+              </div>
             </div>
           </div>
-          <div class="ctn-genero-usuario">
-            <label class="lb-incentivo">Selecciona un genero:</label>
-            <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
-              <label class="form-check-label" for="inlineRadio1">Hombre</label>
-            </div>
-            <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-              <label class="form-check-label" for="inlineRadio2">Mujer</label>
-            </div>
-            <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">
-              <label class="form-check-label" for="inlineRadio3">Otro</label>
+          
+          <div class="form-group">  
+            <label>contraseña</label>
+            <div class="input-group mb-3">	
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1"><i class="fas fa-key"></i></span>
+              </div>
+              <input type="password" class="form-control" placeholder="Contraseña minimo 6 caracteres" name="password" #password="ngModel" [(ngModel)]="UserPassword">
             </div>
           </div>
           <div class="container-fluid ctn-btns-usario-bici" id="main-content">
@@ -167,79 +194,66 @@
                     <label for="file-upload" class="custom-file-upload">
                       <i class="fa fa-cloud-upload"></i> Subir foto de usuario
                     </label>
-                    <input id="file-upload" type="file" />
+                    <input id="file-upload" type="file" (change)="fileChangeEvent($event)" />
+                  </div>
+                  <div class="ctn-btn-registrar-usuario">
+                    <button type="submit" class="btn btn-primary" (click)="registrar()">
+                      <i class="fas fa-plus-circle"></i> Registrar Usuario
+                    </button>
+                  </div>
+                  <div class="ctn-btn-registrar-usuario">
+                    <button type="reset" class="btn btn-secondary" (click)="resetForm(userForm)">
+                      <i class="fas fa-sync-alt"></i> Limpiar Formulario
+                    </button>
                   </div>
                   <div class="col-5 ctn-foto-bicicleta">
                     <button type="button" class="btn btn-outline-secondary btn-subir-bici" data-toggle="modal" data-target="#exampleModal">
                       Informacion de la bicicleta
                     </button>
                   </div>
-                </div>
+                
               </div>
             </div>
-          <div class="ctn-btn-registrar-usuario">
-            <button type="submit" class="btn btn-primary">Registrar Usuario</button>
+            <div>
+              <image-cropper
+                  [imageChangedEvent]="imageChangedEvent"
+                  [maintainAspectRatio]="true"
+                  [aspectRatio]="1 / 1"
+                  [resizeToWidth]="128"
+                  [cropperMinWidth]="128"
+                  [onlyScaleDown]="true"
+                  [roundCropper]="false"
+                  format="png"
+                  outputType="base64"
+                  (imageCropped)="imageCropped($event)"
+                  (imageLoaded)="imageLoaded()"
+                  (cropperReady)="cropperReady()"
+                  (loadImageFailed)="loadImageFailed()"
+                  
+              ></image-cropper>
+            </div>
+            <img [src]="croppedImage" />
           </div>
-        </form>
+            
+          </form>
+
     </div>
   </div>
   
 </div>
 
-<!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-     <div class="modal-header">
-      <h5 class="modal-title" id="exampleModalLabel">Registro de Bicicleta</h5>
-      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-     </div>
-     <div class="modal-body">
-      <div class="form-row">
-        <div class="form-group col-md-6">
-          <label for="color-bici">Color</label>
-          <input type="text" class="form-control" id="color-bici" placeholder="Color(es) de la bicicleta">
-        </div>
-        <div class="form-group col-md-6">
-          <label>Marca</label>
-          <input type="text" class="form-control" placeholder="Marca del marco">
-        </div>
-        <div class="form-group col-md-6">
-          <label>Serial</label>
-          <input type="text" class="form-control" placeholder="Serial del marco">
-        </div>
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
-      <div class="ctn-tipo-bicicleta">
-        <label class="lb-incentivo">Selecciona tipo de la bicicleta:</label>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
-          <label class="form-check-label" for="inlineRadio1">Ruta</label>
-        </div>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-          <label class="form-check-label" for="inlineRadio2">Todo Terreno</label>
-        </div>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">
-          <label class="form-check-label" for="inlineRadio3">BiciCross</label>
-        </div>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">
-          <label class="form-check-label" for="inlineRadio3">Otro</label>
-        </div>
+      <div class="modal-body">
+        <app-registrar-bicicleta></app-registrar-bicicleta>
       </div>
-      
-      <label for="file-upload" class="custom-file-upload lb-foto-bicicleta">
-        <i class="fa fa-cloud-upload"></i> Subir foto de bicicleta
-      </label>
-      <input id="file-upload" type="file" />
-     </div>
-     <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-      <button type="button" class="btn btn-primary">Registrar bicicleta</button>
-     </div>
     </div>
   </div>
- </div>
+</div>

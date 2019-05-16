@@ -42,7 +42,7 @@
             <a routerLink="/crear-incentivo">Crear un incentivo</a>
           </li>
           <li>
-            <a href="#">Listar incentivos</a>
+            <a routerLink="/listar-incentivo">Listar incentivos</a>
           </li>
         </ul>
         <a href="autorizaciones.html" class="dropdown-toggle">
@@ -51,7 +51,7 @@
         </a>
       </li>
       <li>
-        <a href="#">
+        <a (click)="logout()">
           <i class="fas fa-image"></i>
           Cerrar Sesion
         </a>

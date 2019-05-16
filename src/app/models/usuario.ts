@@ -1,8 +1,12 @@
 export class Usuario {
+    $key: string;
     nombre: string;
     apellido: string;
     tipo: string;
-    identificacion: number;
+    carrera?: string;
+    semestre?: number;
+    identificacion: string;
     email: string;
     genero: string;
+    avatar?: string;
 }

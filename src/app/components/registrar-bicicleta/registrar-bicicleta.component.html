@@ -1,0 +1,57 @@
+<form>
+  <div class="modal-body">
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label for="color-bici">Color</label>
+        <input type="text" class="form-control" id="color-bici" placeholder="Color(es) de la bicicleta" name="color"
+          #color="ngModel" [(ngModel)]="crudService.selectUser.color">
+      </div>
+      <div class="form-group col-md-6">
+        <label>Marca</label>
+        <input type="text" class="form-control" placeholder="Marca del marco" name="marca" #marca="ngModel"
+          [(ngModel)]="crudService.selectUser.marca">
+      </div>
+      <div class="form-group col-md-6">
+        <label>Serial</label>
+        <input type="text" class="form-control" placeholder="Serial del marco" name="serial" #serial="ngModel"
+          [(ngModel)]="crudService.selectUser.serial">
+      </div>
+    </div>
+    <div class="ctn-tipo-bicicleta">
+      <label class="lb-incentivo">Selecciona tipo de la bicicleta:</label>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+        <label class="form-check-label" for="inlineRadio1">Ruta</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+        <label class="form-check-label" for="inlineRadio2">Todo Terreno</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">
+        <label class="form-check-label" for="inlineRadio3">BiciCross</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">
+        <label class="form-check-label" for="inlineRadio3">Otro</label>
+      </div>
+    </div>
+
+    <label for="file-upload" class="custom-file-upload lb-foto-bicicleta">
+      <i class="fa fa-cloud-upload"></i> Subir foto de bicicleta
+    </label>
+    <input id="file-upload" type="file" />
+  </div>
+  <div class="modal-footer">
+    <div class="ctn-btn-registrar-usuario">
+      <button type="submit" class="btn btn-primary">
+        <i class="fas fa-plus-circle"></i> Registrar bicicleta
+      </button>
+    </div>
+    <div class="ctn-btn-registrar-usuario">
+      <button type="reset" class="btn btn-secondary" (click)="resetForm(userForm)">
+        <i class="fas fa-sync-alt"></i> Limpiar Formulario
+      </button>
+    </div>
+  </div>
+</form>
