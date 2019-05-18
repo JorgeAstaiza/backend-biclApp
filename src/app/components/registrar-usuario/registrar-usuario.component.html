@@ -22,7 +22,7 @@
             <a routerLink="/registrar-usuario">Registrar</a>
           </li>
           <li>
-            <a routerLink="/listar-usuario">Listar usuarios</a>
+            <a routerLink="/listar-usuarios">Listar usuarios</a>
           </li>
         </ul>
       </li>
@@ -67,7 +67,7 @@
         <p>Bienvenido al Team Bike /</p> <p>Registrar Usuario</p> 
       </div>
     </nav>
-    <div class="contenedor-formulario">
+    <div class="contenedor-formulario"  [ngStyle]="{display: (visibleFormBikeTrue) ? 'flex': 'none'}">
         <form class="form-registrar-usuario" #userForm="ngForm" (ngSubmit)="onSubmit(userForm)">
           <h1 class="titulo-login">Registrar Usuario</h1>
           <div class="form-row">
@@ -113,14 +113,14 @@
               <div class="input-group-prepend">
                 <label class="input-group-text" for="inputGroupSelect01">Tipo de identificacion</label>
               </div>
-              <select class="custom-select" id="inputGroupIds" [(ngModel)]="idSeleccionado" (change)="idUsuario()" name="identificacion">
+              <select class="custom-select" id="inputGroupIds" [(ngModel)]="idSeleccionado" (change)="idUsuario()" name="tipoid">
                 <option selected>Seleccionar</option>
                 <option *ngFor="let id of identificaciones" >
                   {{id}}
                 </option>
               </select>
-              <div *ngIf="idSeleccionado" style="display: none;">
-                <input type="text" value="{{idSeleccionado}}" name="identificacion" #identificacion="ngModel" [(ngModel)]="crudService.selectUser.identificacion">
+              <div *ngIf="idSeleccionado" >
+                <input type="text" value="{{idSeleccionado}}" name="tipoid" #tipoid="ngModel" [(ngModel)]="crudService.selectUser.tipoid">
               </div>
             </div>
             <div class="input-group mb-3" [ngStyle]="{display: (visible) ? 'flex': 'none'}">
@@ -157,11 +157,6 @@
                 <span class="input-group-text"><i class="fas fa-id-card"></i></span>
               </div>
               <input type="number" class="form-control" placeholder="Numero de identificacion" name="identificacion" #identificacion="ngModel" [(ngModel)]="crudService.selectUser.identificacion">
-              <!--
-              <div *ngIf="crudService.selectUser.identificacion">
-                <input type="password" value="{{crudService.selectUser.identificacion}}" name="password" [(ngModel)]="userPassword">
-              </div>
-              -->
             </div>
           </div> 
           
@@ -190,12 +185,8 @@
           <div class="container-fluid ctn-btns-usario-bici" id="main-content">
               <div class="container">
                 <div class="row">
-                  <div class="col-5 ctn-foto-usuario">
-                    <label for="file-upload" class="custom-file-upload">
-                      <i class="fa fa-cloud-upload"></i> Subir foto de usuario
-                    </label>
-                    <input id="file-upload" type="file" (change)="fileChangeEvent($event)" />
-                  </div>
+                  
+                  <input #imageUser type="hidden" [value]="urlImage | async">
                   <div class="ctn-btn-registrar-usuario">
                     <button type="submit" class="btn btn-primary" (click)="registrar()">
                       <i class="fas fa-plus-circle"></i> Registrar Usuario
@@ -206,42 +197,33 @@
                       <i class="fas fa-sync-alt"></i> Limpiar Formulario
                     </button>
                   </div>
+                  <!--
                   <div class="col-5 ctn-foto-bicicleta">
                     <button type="button" class="btn btn-outline-secondary btn-subir-bici" data-toggle="modal" data-target="#exampleModal">
                       Informacion de la bicicleta
                     </button>
                   </div>
-                
+                  -->
               </div>
             </div>
-            <div>
-              <image-cropper
-                  [imageChangedEvent]="imageChangedEvent"
-                  [maintainAspectRatio]="true"
-                  [aspectRatio]="1 / 1"
-                  [resizeToWidth]="128"
-                  [cropperMinWidth]="128"
-                  [onlyScaleDown]="true"
-                  [roundCropper]="false"
-                  format="png"
-                  outputType="base64"
-                  (imageCropped)="imageCropped($event)"
-                  (imageLoaded)="imageLoaded()"
-                  (cropperReady)="cropperReady()"
-                  (loadImageFailed)="loadImageFailed()"
-                  
-              ></image-cropper>
-            </div>
-            <img [src]="croppedImage" />
           </div>
             
           </form>
 
     </div>
+
+    <!--FORMULARIO BICICLETA-->
+    <div class="contenedor-formulario" [ngStyle]="{display: (visibleFormBikeFalse) ? 'flex': 'none'}">
+      <form class="form-registrar-usuario">
+        <h1 class="titulo-login">Registrar Bicicleta</h1>
+        <app-registrar-bicicleta></app-registrar-bicicleta>
+      </form>
+    </div>
+
   </div>
   
 </div>
-
+<!--
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -257,3 +239,4 @@
     </div>
   </div>
 </div>
+-->

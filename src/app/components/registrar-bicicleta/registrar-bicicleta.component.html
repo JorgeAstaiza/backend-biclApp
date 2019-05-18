@@ -1,39 +1,38 @@
-<form>
+<form #bikeForm="ngForm" (ngSubmit)="onSubmit(bikeForm)">
   <div class="modal-body">
     <div class="form-row">
       <div class="form-group col-md-6">
+        <label for="color-bici">Numero de Identificacion de usuario</label>
+        <input type="text" class="form-control" id="color-bici" placeholder="Color(es) de la bicicleta" name="identificacion"
+          #identificacion="ngModel" [(ngModel)]="crudService.selectedBicicleta.identificacion">
+      </div>
+      <div class="form-group col-md-6">
         <label for="color-bici">Color</label>
         <input type="text" class="form-control" id="color-bici" placeholder="Color(es) de la bicicleta" name="color"
-          #color="ngModel" [(ngModel)]="crudService.selectUser.color">
+          #color="ngModel" [(ngModel)]="crudService.selectedBicicleta.color">
       </div>
       <div class="form-group col-md-6">
         <label>Marca</label>
         <input type="text" class="form-control" placeholder="Marca del marco" name="marca" #marca="ngModel"
-          [(ngModel)]="crudService.selectUser.marca">
+          [(ngModel)]="crudService.selectedBicicleta.marca">
       </div>
       <div class="form-group col-md-6">
         <label>Serial</label>
         <input type="text" class="form-control" placeholder="Serial del marco" name="serial" #serial="ngModel"
-          [(ngModel)]="crudService.selectUser.serial">
+          [(ngModel)]="crudService.selectedBicicleta.serial">
       </div>
     </div>
-    <div class="ctn-tipo-bicicleta">
-      <label class="lb-incentivo">Selecciona tipo de la bicicleta:</label>
-      <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
-        <label class="form-check-label" for="inlineRadio1">Ruta</label>
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <label class="input-group-text" for="inputGroupSelect01">Tipo</label>
       </div>
-      <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-        <label class="form-check-label" for="inlineRadio2">Todo Terreno</label>
-      </div>
-      <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">
-        <label class="form-check-label" for="inlineRadio3">BiciCross</label>
-      </div>
-      <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">
-        <label class="form-check-label" for="inlineRadio3">Otro</label>
+      <select class="custom-select" id="inputGroupCarreras" [(ngModel)]="tipoBicicletaSeleccionada" (change)="tipoSeleccionado()" name="tipo">
+        <option *ngFor="let tipo of tiposBici">
+          {{tipo}}
+        </option>
+      </select>
+      <div *ngIf="tipoBicicletaSeleccionada" style="display: none;">
+        <input type="text" value="{{tipoBicicletaSeleccionada}}" name="tipo" #tipo="ngModel" [(ngModel)]="crudService.selectedBicicleta.tipo">
       </div>
     </div>
 
@@ -44,7 +43,7 @@
   </div>
   <div class="modal-footer">
     <div class="ctn-btn-registrar-usuario">
-      <button type="submit" class="btn btn-primary">
+      <button type="submit" class="btn btn-primary" (click)="registrarBici()">
         <i class="fas fa-plus-circle"></i> Registrar bicicleta
       </button>
     </div>

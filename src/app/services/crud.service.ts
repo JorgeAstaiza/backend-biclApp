@@ -4,26 +4,28 @@ import { Usuario } from '../models/usuario';
 import { Incentivos } from '../models/incentivos';
 import * as firebase from 'firebase/app';
 import { Bicicleta } from '../models/bicicleta';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CrudService {
-
   userList: AngularFireList<any>;
   incentivosList: AngularFireList<any>;
   bicicletaList: AngularFireList<any>;
   selectUser: Usuario = new Usuario();
   selectIncentivo: Incentivos = new Incentivos();
-  selecteBicicleta: Bicicleta = new Bicicleta();
+  selectedBicicleta: Bicicleta = new Bicicleta();
 
-  constructor(private firebase: AngularFireDatabase) { }
+  constructor(public firebase: AngularFireDatabase) {
+   }
 
   insertBicicleta(bicicleta: Bicicleta){
-    this.bicicletaList.push({
+    firebase.database().ref('users/' + bicicleta.identificacion + '/bicicletas' ).set({
       color: bicicleta.color,
       marca: bicicleta.marca,
-      serial: bicicleta.serial
+      serial: bicicleta.serial,
+      tipo: bicicleta.tipo
     })
   }
 
@@ -48,7 +50,8 @@ export class CrudService {
         semestre: user.semestre,
         tipo: user.tipo,
         email: user.email,
-        genero: user.genero
+        genero: user.genero,
+        tipoid: user.tipoid
         //avatar: user.avatar
       });
     }
@@ -66,7 +69,8 @@ export class CrudService {
       nombre: user.nombre,
       apellido: user.apellido,
       carrera: user.carrera,
-      id: user.identificacion
+      id: user.identificacion,
+      avatar: user.avatar
     })
   }
   deleteProduct($key:string){

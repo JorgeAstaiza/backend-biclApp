@@ -9,10 +9,7 @@ import { Router } from '@angular/router';
 import { FirebaseFirestore } from '@angular/fire';
 import { AngularFireStorage } from '@angular/fire/storage'
 import { AdminService } from 'src/app/services/admin.service';
-import { ImageCroppedEvent } from 'ngx-image-cropper';
-import { ImageCropperComponent } from 'ngx-image-cropper'
-//import { ImageCroppedEvent } from './image-cropper/interfaces/image-cropped-event.interface';
-//import { ImageCropperComponent } from './image-cropper/component/image-cropper.component';
+
 
 @Component({
   selector: 'app-registrar-usuario',
@@ -21,24 +18,23 @@ import { ImageCropperComponent } from 'ngx-image-cropper'
 })
  
 export class RegistrarUsuarioComponent implements OnInit {
-  imageChangedEvent: any = '';
-  croppedImage: any = '';
-  showCropper = false;
   registerForm: FormGroup;
   submitted = false;
-  picture: any;
   poblacion;
   identificaciones;
   semestres;
   carreras;
   genero;
   visible: boolean = false;
+  visibleFormBikeTrue: boolean = true;
+  visibleFormBikeFalse: boolean= false;
   carreraSeleccionada: string = '0';
   semestreSeleccionado: string = '0';
   idSeleccionado: string = '0';
   tipoSeleccionado: string = '0';
   verSeleccion: string = '';
   generoSeleccionado: string = '0';
+  tipoId: string = '0';
   email: string = null;
   emailUs: string = null;
   UserPassword: string = null;
@@ -46,8 +42,7 @@ export class RegistrarUsuarioComponent implements OnInit {
     private crudService: CrudService, 
     private autorizacionServices: AutorizacionService, 
     private router: Router,
-    private adminService: AdminService,
-    private firebaseStorage: AngularFireStorage) { 
+    ) { 
     this.poblacion=['Estudiante', 'Docente', 'Administrativo', 'Otro'];
     this.identificaciones=['Cédula de ciudadanía', 'Codigo Estudiantil', 'Tarjeta de identidad', 'Tarjeta de pasaporte']
     this.semestres=[1,2,3,4,5,6,7,8,9,10];
@@ -63,8 +58,8 @@ export class RegistrarUsuarioComponent implements OnInit {
       this.visible = false;
     }
   }
-  seleccionarFoto(){
-    this.picture = this.crudService.selectUser.avatar;
+  visibleBike(){
+    
   }
   generoUsuario(){
     this.generoSeleccionado;
@@ -81,6 +76,9 @@ export class RegistrarUsuarioComponent implements OnInit {
 
   carreraUsuario(){
     this.carreraSeleccionada;
+  }
+  tiposId(){
+    this.tipoId;
   }
   ngOnInit(){
     this.crudService.getUsers();
@@ -107,7 +105,7 @@ export class RegistrarUsuarioComponent implements OnInit {
     });
   }
   onSubmit(userForm: NgForm) {
-    this.crudService.insertUser(userForm.value);
+    this.crudService.insertUser(userForm.value);      
     this.resetForm(userForm);
 
     this.submitted = true;
@@ -118,22 +116,6 @@ export class RegistrarUsuarioComponent implements OnInit {
     alert('SUCCESS!! :-)\n\n' + JSON.stringify(this.registerForm.value))
   }
   registrar(){
-    if(this.croppedImage){
-      const currentPictureId = Date.now();
-      const pictures = this.firebaseStorage.ref('pictures/' + currentPictureId + '.jpg').putString(this.croppedImage, 'data_url');
-      pictures.then((result) => {
-        this.picture = this.firebaseStorage.ref('pictures/' + currentPictureId + '.jpg').getDownloadURL();
-        this.picture.subscribe((p) => {
-          this.crudService.setAvatar(p, this.crudService.selectUser.identificacion).then(() => {
-            alert('Avatar subido correctamentne');
-          }).catch((error) => {
-            alert('Hubo un error al tratar de subir la imagen');
-            console.log(error);
-          });
-        });
-      }).catch((error) => {
-        console.log(error);
-      });
       this.autorizacionServices.registro(this.email, this.UserPassword).then((data)=>{
         const user = {
           //uid: data.user.uid,
@@ -144,38 +126,18 @@ export class RegistrarUsuarioComponent implements OnInit {
         alert('a ocurrido un err');
         console.log(err)
       })
-    }
+      if(this.visibleFormBikeTrue == true){
+        this.visibleFormBikeTrue = false;
+        this.visibleFormBikeFalse = true;
+        console.log('valor de true 1 = ' +this.visibleFormBikeTrue);
+        console.log('valor de false 1 = ' + this.visibleFormBikeFalse );
+      }else if(this.visibleFormBikeFalse == true){
+        this.visibleFormBikeTrue = false;
+        this.visibleFormBikeFalse = true;
+        console.log('valor de true 2 = ' +this.visibleFormBikeTrue);
+        console.log('valor de false 2 = ' + this.visibleFormBikeFalse );
+      }
    }
-   //@ViewChild(ImageCropperComponent) imageCropper: ImageCropperComponent;
-
-   fileChangeEvent(event: any): void {
-       this.imageChangedEvent = event;
-   }
-   imageCropped(event: ImageCroppedEvent) {
-     this.croppedImage = event.base64;
-     console.log(event);
-   }
-   imageLoaded() {
-     this.showCropper = true;
-      console.log('Image loaded')
-   }
-   cropperReady() {
-     console.log('Cropper ready')
-   }
-   loadImageFailed () {
-     console.log('Load failed');
-   }
-   /*rotateLeft() {
-     this.imageCropper.rotateLeft();
-   }
-   rotateRight() {
-     this.imageCropper.rotateRight();
-   }
-   flipHorizontal() {
-     this.imageCropper.flipHorizontal();
-   }
-   flipVertical() {
-     this.imageCropper.flipVertical();
-   }*/
+   
 }
 

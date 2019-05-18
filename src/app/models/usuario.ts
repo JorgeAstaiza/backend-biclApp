@@ -4,9 +4,10 @@ export class Usuario {
     apellido: string;
     tipo: string;
     carrera?: string;
-    semestre?: number;
+    semestre?: string;
     identificacion: string;
     email: string;
     genero: string;
     avatar?: string;
+    tipoid:string;
 }

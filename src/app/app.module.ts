@@ -35,6 +35,7 @@ import { ImageCropperModule } from 'ngx-image-cropper';
 import { RegistrarBicicletaComponent } from './components/registrar-bicicleta/registrar-bicicleta.component';
 
 
+
 const routes: Route[] = [
   {path: '', component: LoginComponent},
   {path: 'registrarse', component: RegistrarseComponent},

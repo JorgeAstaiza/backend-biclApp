@@ -3,4 +3,6 @@ export class Bicicleta {
     color: string;
     marca: string;
     serial: string;
+    tipo: string;
+    identificacion: string;
 }

@@ -96,7 +96,7 @@
 
       </div>
     </div>
-    <div class="container">
+    <div class="container" *ngIf="userList.length > 0; else nousuarios">
       <div class="row">
         <div class="datos" *ngFor="let user of userList">
           <div class="col">
@@ -116,11 +116,11 @@
           </div>
           <div class="col">
             <ul class="campo" >
-              <li>{{user.id}}</li>
+              <li>{{user.$key}}</li>
             </ul>
           </div>
           <div class="col btns">
-            <button class="btn btn-success" (click)="onEdit(user)"><i class="fas fa-edit"></i>Editar</button>
+            <button class="btn btn-success" (click)="onEdit(user)" data-toggle="modal" data-target=".bd-example-modal-lg"><i class="fas fa-edit"></i>Editar</button>
             <button class="btn btn-danger" (click)="onDelete(user.$key)"><i class="far fa-trash-alt"></i>Eliminar</button>
             <button class="btn btn-primary"> <a routerLink="/codeqr"><i class="fas fa-qrcode"></i>Generar QR</a></button>
           </div>
@@ -129,4 +129,142 @@
       </div>
     </div>
   </div>
+</div>
+<ng-template #nousuarios> 
+  <p>Aun no hay usuarios registrados</p>
+</ng-template>
+
+<!-- Large modal -->
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="contenedor-formulario">
+        <div id="profileContainer">
+            <div class="container pato45">
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="avatarFrameonline">
+                    <img [src]="croppedImage" />
+                    
+                  </div>
+                  <hr />
+                                        
+                </div>
+                <div class="contenedor-formulario">
+                  <div class="col-5 ctn-foto-usuario">
+                    <label for="file-upload" class="custom-file-upload">
+                      <i class="fa fa-cloud-upload"></i> Subir foto de usuario
+                    </label>
+                    <input id="file-upload" type="file" (change)="fileChangeEvent($event)" />
+                  </div>
+                  <div>
+                    <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true" [aspectRatio]="1 / 1"
+                      [resizeToWidth]="128" [cropperMinWidth]="128" [onlyScaleDown]="true" [roundCropper]="false" format="png"
+                      outputType="base64" (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()"
+                      (cropperReady)="cropperReady()" (loadImageFailed)="loadImageFailed()"></image-cropper>
+                  </div>
+                  <form class="form-registrar-usuario" #userForm="ngForm" (ngSubmit)="onSubmit(userForm)">
+                    <h1 class="titulo-login">Registrar Usuario</h1>
+                    <div class="form-row">
+                      <div class="form-group col-md-6">
+                        <label for="nombre-usuario">Nombres</label>
+                        <input type="text" class="form-control" id="nombre-usuario" placeholder="Nombre(s)" name="nombre" #nombre="ngModel" [(ngModel)]="crudService.selectUser.nombre">
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label>Apellido</label>
+                        <input type="text" class="form-control" placeholder="Apellido(s)" name="apellido" #apellido="ngModel" [(ngModel)]="crudService.selectUser.apellido">
+                      </div>
+                    </div>
+                    
+                  
+                  <div class="form-group">
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputGroupSelect01">Tipo de usuario</label>
+                      </div>
+                      <select [(ngModel)]="tipoSeleccionado" (change)="capturar()" class="custom-select" id="inputGroupUsers" name="tipo">
+                        <option selected>{{crudService.selectUser.tipo}}</option>
+                        <option *ngFor="let usuario of poblacion" >
+                          {{usuario}}
+                        </option>
+                      </select>
+                      <div >
+                        <input type="text" value="{{tipoSeleccionado}}" name="tipo" #tipo="ngModel" [(ngModel)]="crudService.selectUser.tipo">
+                      </div>
+                    </div>
+                    
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputGroupSelect01">Tipo de identificacion</label>
+                      </div>
+                      <select class="custom-select" id="inputGroupIds" [(ngModel)]="idSeleccionado" (change)="idUsuario()" name="tipoid">
+                        <option selected>{{crudService.selectUser.tipoid}}</option>
+                        <option *ngFor="let id of identificaciones" >
+                          {{id}}
+                        </option>
+                      </select>
+                      <div >
+                        <input type="text" value="{{idSeleccionado}}" name="tipoid" #tipoid="ngModel" [(ngModel)]="crudService.selectUser.tipoid">
+                      </div>
+                    </div>
+                    <div class="input-group mb-3" [ngStyle]="{display: (visible) ? 'flex': 'none'}">
+                      <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputGroupSelect01">Semestre</label>
+                      </div>
+                      <select class="custom-select" id="inputGroupSemestres" [(ngModel)]="semestreSeleccionado" (change)="semestreUsuario()" name="semestre">
+                        <option selected>{{crudService.selectUser.semestre}}</option>
+                        <option *ngFor="let semestre of semestres">
+                          {{semestre}}
+                        </option>
+                      </select>
+                      <div >
+                        <input type="text" value="{{semestreSeleccionado}}" name="semestre" #semestre="ngModel" [(ngModel)]="crudService.selectUser.semestre">
+                      </div>
+                    </div>
+                    <div class="input-group mb-3" [ngStyle]="{display: (visible) ? 'flex': 'none'}">
+                      <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputGroupSelect01">Carrera</label>
+                      </div>
+                      <select class="custom-select" id="inputGroupCarreras" [(ngModel)]="carreraSeleccionada" (change)="carreraUsuario()" name="carrera">
+                        <option selected>{{crudService.selectUser.carrera}}</option>
+                        <option *ngFor="let carrera of carreras">
+                          {{carrera}}
+                        </option>
+                      </select>
+                      <div >
+                        <input type="text" value="{{carreraSeleccionada}}" name="carrera" #carrera="ngModel" [(ngModel)]="crudService.selectUser.carrera">
+                      </div>
+                    </div>
+                    <label>Numero de identificacion</label>
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                      </div>
+                      <input type="number" class="form-control" placeholder="Numero de identificacion" name="identificacion" #identificacion="ngModel" [(ngModel)]="crudService.selectUser.$key">
+                    </div>
+                  </div> 
+                  <div class="container">
+                    <div class="row">
+                      
+                      <input #imageUser type="hidden" [value]="urlImage | async">
+                      <div class="ctn-btn-registrar-usuario">
+                        <button type="submit" class="btn btn-primary" (click)="registrar()">
+                          <i class="fas fa-plus-circle"></i> Registrar Usuario
+                        </button>
+                      </div>
+                      <div class="ctn-btn-registrar-usuario">
+                        <button type="reset" class="btn btn-secondary" (click)="resetForm(userForm)">
+                          <i class="fas fa-sync-alt"></i> Limpiar Formulario
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>      
+    </div>
+    </div>
+  </div>
+</div>
 </div>
