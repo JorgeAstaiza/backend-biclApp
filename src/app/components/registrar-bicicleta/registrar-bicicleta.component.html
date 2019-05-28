@@ -1,56 +1,124 @@
-<form #bikeForm="ngForm" (ngSubmit)="onSubmit(bikeForm)">
-  <div class="modal-body">
-    <div class="form-row">
-      <div class="form-group col-md-6">
-        <label for="color-bici">Numero de Identificacion de usuario</label>
-        <input type="text" class="form-control" id="color-bici" placeholder="Color(es) de la bicicleta" name="identificacion"
-          #identificacion="ngModel" [(ngModel)]="crudService.selectedBicicleta.identificacion">
-      </div>
-      <div class="form-group col-md-6">
-        <label for="color-bici">Color</label>
-        <input type="text" class="form-control" id="color-bici" placeholder="Color(es) de la bicicleta" name="color"
-          #color="ngModel" [(ngModel)]="crudService.selectedBicicleta.color">
-      </div>
-      <div class="form-group col-md-6">
-        <label>Marca</label>
-        <input type="text" class="form-control" placeholder="Marca del marco" name="marca" #marca="ngModel"
-          [(ngModel)]="crudService.selectedBicicleta.marca">
-      </div>
-      <div class="form-group col-md-6">
-        <label>Serial</label>
-        <input type="text" class="form-control" placeholder="Serial del marco" name="serial" #serial="ngModel"
-          [(ngModel)]="crudService.selectedBicicleta.serial">
-      </div>
+<div class="wrapper">
+  <!-- Sidebar  -->
+  <nav id="sidebar">
+    <div class="sidebar-header">
+      <img class="logo" src="../../../assets/imagenes/Uni.png" alt="">
+      <img class="logo-reducido" src="img/logo-reducido.png" alt="">
     </div>
-    <div class="input-group mb-3">
-      <div class="input-group-prepend">
-        <label class="input-group-text" for="inputGroupSelect01">Tipo</label>
-      </div>
-      <select class="custom-select" id="inputGroupCarreras" [(ngModel)]="tipoBicicletaSeleccionada" (change)="tipoSeleccionado()" name="tipo">
-        <option *ngFor="let tipo of tiposBici">
-          {{tipo}}
-        </option>
-      </select>
-      <div *ngIf="tipoBicicletaSeleccionada" style="display: none;">
-        <input type="text" value="{{tipoBicicletaSeleccionada}}" name="tipo" #tipo="ngModel" [(ngModel)]="crudService.selectedBicicleta.tipo">
-      </div>
-    </div>
+    <ul class="list-unstyled components">
+      <li>
+        <a routerLink="/inicio" class="dropdown-toggle">
+          <i class="fas fa-key"></i>
+          Inicio
+        </a>
+      </li>
+      <li>
+        <a href="#usuarios" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+          <i class="fas fa-users"></i>
+          Registrar usuario
+        </a>
+        <ul class="collapse list-unstyled" id="usuarios">
+          <li>
+            <a routerLink="/registrar-usuario">Registrar</a>
+          </li>
+          <li>
+            <a routerLink="/listar-usuarios">Listar usuarios</a>
+          </li>
+        </ul>
+      </li>
+      <li >
+        <a routerLink="/reporte" class="dropdown-toggle">
+          <i class="fas fa-chart-area"></i>
+          Reporte completo
+        </a>
+      </li>
+      <li>
+        <a href="#incentivos" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+          <i class="fas fa-briefcase"></i>
+          Incentivos
+        </a>
+        <ul class="collapse list-unstyled" id="incentivos">
+          <li>
+            <a routerLink="/crear-incentivo">Crear un incentivo</a>
+          </li>
+          <li>
+            <a routerLink="/listar-incentivos">Listar incentivos</a>
+          </li>
+        </ul>
+        <a href="autorizaciones.html" class="dropdown-toggle">
+          <i class="fas fa-key"></i>
+          Autorizaciones
+        </a>
+      </li>
+      <li>
+        <a (click)="logout()">
+          <i class="fas fa-image"></i>
+          Cerrar Sesion
+        </a>
+      </li>
+    </ul>
+  </nav>
+  
+  <!-- Page Content  -->
+  <div id="content">
 
-    <label for="file-upload" class="custom-file-upload lb-foto-bicicleta">
-      <i class="fa fa-cloud-upload"></i> Subir foto de bicicleta
-    </label>
-    <input id="file-upload" type="file" />
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <p>Bienvenido al Team Bike</p>
+      </div>
+    </nav>
+    <form #bikeForm="ngForm" (ngSubmit)="onSubmit(bikeForm)" autocomplete="off">
+      <h1 class="titulo-login">Registrar Bicicleta</h1>
+      <div class="modal-body">
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="color-bici">Numero de Identificacion de usuario</label>
+            <input type="text" class="form-control" id="color-bici" placeholder="Escribe la identificacion de nuevo" name="identificacion"
+              #identificacion="ngModel" [(ngModel)]="crudService.selectedBicicleta.identificacion" >
+          </div>
+          <div class="form-group col-md-6">
+            <label for="color-bici">Color</label>
+            <input type="text" class="form-control" id="color-bici" placeholder="Color(es) de la bicicleta" name="color"
+              #color="ngModel" [(ngModel)]="crudService.selectedBicicleta.color">
+          </div>
+          <div class="form-group col-md-6">
+            <label>Marca</label>
+            <input type="text" class="form-control" placeholder="Marca del marco" name="marca" #marca="ngModel"
+              [(ngModel)]="crudService.selectedBicicleta.marca">
+          </div>
+          <div class="form-group col-md-6">
+            <label>Serial</label>
+            <input type="text" class="form-control" placeholder="Serial del marco" name="serial" #serial="ngModel"
+              [(ngModel)]="crudService.selectedBicicleta.serial">
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="inputGroupSelect01">Tipo</label>
+          </div>
+          <select class="custom-select" id="inputGroupCarreras" [(ngModel)]="tipoBicicletaSeleccionada" (change)="tipoSeleccionado()" name="tipo">
+            <option *ngFor="let tipo of tiposBici">
+              {{tipo}}
+            </option>
+          </select>
+          <div *ngIf="tipoBicicletaSeleccionada" style="display: none;">
+            <input type="text" value="{{tipoBicicletaSeleccionada}}" name="tipo" #tipo="ngModel" [(ngModel)]="crudService.selectedBicicleta.tipo">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="ctn-btn-registrar-usuario">
+          <button type="submit" class="btn btn-primary" (click)="registrarBici()">
+            <i class="fas fa-plus-circle"></i> Registrar bicicleta
+          </button>
+        </div>
+        <div class="ctn-btn-registrar-usuario">
+          <button type="reset" class="btn btn-secondary" (click)="resetForm(userForm)">
+            <i class="fas fa-sync-alt"></i> Limpiar Formulario
+          </button>
+        </div>
+      </div>
+    </form>
   </div>
-  <div class="modal-footer">
-    <div class="ctn-btn-registrar-usuario">
-      <button type="submit" class="btn btn-primary" (click)="registrarBici()">
-        <i class="fas fa-plus-circle"></i> Registrar bicicleta
-      </button>
-    </div>
-    <div class="ctn-btn-registrar-usuario">
-      <button type="reset" class="btn btn-secondary" (click)="resetForm(userForm)">
-        <i class="fas fa-sync-alt"></i> Limpiar Formulario
-      </button>
-    </div>
-  </div>
-</form>
+</div>
+

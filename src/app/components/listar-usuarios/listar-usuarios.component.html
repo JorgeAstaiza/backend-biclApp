@@ -71,7 +71,7 @@
       <div class="container">
         <div class="row">
           <div class="col">
-            <div class="input-group mb-3">	
+            <div class="input-group mb-3" style="margin: 0 !important">	
               <div class="input-group-prepend">
                 <span class="input-group-text" id="basic-addon1"><i class="far fa-id-badge"></i>Identificacion</span>
               </div>
@@ -88,41 +88,42 @@
     </div>
     <div class="container">
       <div class="row">
-        <div class="col">Nombre</div>
-        <div class="col">Carrera</div>
-        <div class="col">Semestre</div>
-        <div class="col">Codigo</div>
-        <div class="col">Acciones</div>
+        <div class="col grid">Nombre</div>
+        <div class="col grid">Carrera</div>
+        <div class="col grid">Semestre</div>
+        <div class="col grid">Codigo</div>
+        <div class="col grid">Acciones</div>
 
       </div>
     </div>
     <div class="container" *ngIf="userList.length > 0; else nousuarios">
       <div class="row">
         <div class="datos" *ngFor="let user of userList">
-          <div class="col">
+          <div class="col grid">
             <ul class="campo" >
               <li>{{user.nombre}} {{user.apellido}}</li>
             </ul>
           </div>
-          <div class="col">
+          <div class="col grid ">
             <ul class="campo" >
               <li>{{user.carrera}}</li>
             </ul>
           </div>
-          <div class="col">
+          <div class="col grid">
             <ul class="campo" >
               <li>{{user.semestre}}</li>
             </ul>
           </div>
-          <div class="col">
+          <div class="col grid">
             <ul class="campo" >
               <li>{{user.$key}}</li>
             </ul>
           </div>
-          <div class="col btns">
-            <button class="btn btn-success" (click)="onEdit(user)" data-toggle="modal" data-target=".bd-example-modal-lg"><i class="fas fa-edit"></i>Editar</button>
+          <div class="col btns grid">
+            <button style="margin-right: 7px" class="btn btn-success" (click)="onEdit(user)" data-toggle="modal" data-target=".bd-example-modal-lg"><i class="fas fa-user"></i></button>
+            <button class="btn btn-success" (click)="onEdit(user)" data-toggle="modal" data-target=".bd-example-modal-lg2"><i class="fas fa-bicycle"></i></button>
             <button class="btn btn-danger" (click)="onDelete(user.$key)"><i class="far fa-trash-alt"></i>Eliminar</button>
-            <button class="btn btn-primary"> <a routerLink="/codeqr"><i class="fas fa-qrcode"></i>Generar QR</a></button>
+            <button class="btn btn-primary" (click)="onEdit(user)" data-toggle="modal" data-target=".bd-example-modal-lg3"><i class="fas fa-qrcode"></i>Generar QR</button>
           </div>
         </div>
         
@@ -134,13 +135,13 @@
   <p>Aun no hay usuarios registrados</p>
 </ng-template>
 
-<!-- Large modal -->
+<!-- Large modal Estudiante-->
 <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="contenedor-formulario">
         <div id="profileContainer">
-            <div class="container pato45">
+            <div class="container conten-formulario">
               <div class="row">
                 <div class="col-md-4">
                   <div class="avatarFrameonline">
@@ -164,7 +165,8 @@
                       (cropperReady)="cropperReady()" (loadImageFailed)="loadImageFailed()"></image-cropper>
                   </div>
                   <form class="form-registrar-usuario" #userForm="ngForm" (ngSubmit)="onSubmit(userForm)">
-                    <h1 class="titulo-login">Registrar Usuario</h1>
+                    <h1 class="titulo-login">Datos de Usuario</h1>
+                    <input type="hidden" name="$key" #key="ngModel" [(ngModel)]="crudService.selectUser.$key">
                     <div class="form-row">
                       <div class="form-group col-md-6">
                         <label for="nombre-usuario">Nombres</label>
@@ -188,7 +190,7 @@
                           {{usuario}}
                         </option>
                       </select>
-                      <div >
+                      <div style="display: none">
                         <input type="text" value="{{tipoSeleccionado}}" name="tipo" #tipo="ngModel" [(ngModel)]="crudService.selectUser.tipo">
                       </div>
                     </div>
@@ -203,7 +205,7 @@
                           {{id}}
                         </option>
                       </select>
-                      <div >
+                      <div style="display: none">
                         <input type="text" value="{{idSeleccionado}}" name="tipoid" #tipoid="ngModel" [(ngModel)]="crudService.selectUser.tipoid">
                       </div>
                     </div>
@@ -217,7 +219,7 @@
                           {{semestre}}
                         </option>
                       </select>
-                      <div >
+                      <div style="display: none">
                         <input type="text" value="{{semestreSeleccionado}}" name="semestre" #semestre="ngModel" [(ngModel)]="crudService.selectUser.semestre">
                       </div>
                     </div>
@@ -231,7 +233,7 @@
                           {{carrera}}
                         </option>
                       </select>
-                      <div >
+                      <div style="display: none">
                         <input type="text" value="{{carreraSeleccionada}}" name="carrera" #carrera="ngModel" [(ngModel)]="crudService.selectUser.carrera">
                       </div>
                     </div>
@@ -242,14 +244,13 @@
                       </div>
                       <input type="number" class="form-control" placeholder="Numero de identificacion" name="identificacion" #identificacion="ngModel" [(ngModel)]="crudService.selectUser.$key">
                     </div>
-                  </div> 
+                  </div>
+                  
                   <div class="container">
                     <div class="row">
-                      
-                      <input #imageUser type="hidden" [value]="urlImage | async">
                       <div class="ctn-btn-registrar-usuario">
-                        <button type="submit" class="btn btn-primary" (click)="registrar()">
-                          <i class="fas fa-plus-circle"></i> Registrar Usuario
+                        <button type="submit" class="btn btn-primary" (click)="actualizar()">
+                          <i class="fas fa-plus-circle"></i> Actualizar Usuario
                         </button>
                       </div>
                       <div class="ctn-btn-registrar-usuario">
@@ -263,8 +264,88 @@
               </div>
             </div>
           </div>      
+        </div>
+      </div>
     </div>
+  </div>
+</div>
+
+<!-- Large modal Bicicleta-->
+<div class="modal fade bd-example-modal-lg2" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="contenedor-formulario">
+        <div id="profileContainer">
+            <div class="container">
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="avatarFrameonline">
+                    <img [src]="croppedImage" />
+                    
+                  </div>
+                  <hr/>
+                                        
+                </div>
+                <div class="contenedor-formulario">
+                  <div class="col-5 ctn-foto-usuario">
+                    <label for="file-upload" class="custom-file-upload">
+                      <i class="fa fa-cloud-upload"></i> Subir foto de Bicicleta
+                    </label>
+                    <input id="file-upload" type="file" (change)="fileChangeEvent($event)" />
+                  </div>
+                  <div>
+                    <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true" [aspectRatio]="1 / 1"
+                      [resizeToWidth]="128" [cropperMinWidth]="128" [onlyScaleDown]="true" [roundCropper]="false" format="png"
+                      outputType="base64" (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()"
+                      (cropperReady)="cropperReady()" (loadImageFailed)="loadImageFailed()"></image-cropper>
+                  </div>
+                  <form class="form-registrar-usuario" #userForm="ngForm" (ngSubmit)="onSubmit(userForm)">
+                    <h1 class="titulo-login">Datos de Bicicleta</h1>
+                    <div class="form-row">
+                      <div class="form-group col-md-6">
+                        <label for="nombre-usuario">Marca</label>
+                        <input type="text" class="form-control" id="nombre-usuario" placeholder="Nombre(s)" name="nombre" #nombre="ngModel" [(ngModel)]="crudService.selectUser.nombre">
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label>Color</label>
+                        <input type="text" class="form-control" placeholder="Color Bicicleta" name="color" #color="ngModel" [(ngModel)]="bicicletaList">
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label>Serial</label>
+                        <input type="text" class="form-control" placeholder="Apellido(s)" name="apellido" #apellido="ngModel" [(ngModel)]="crudService.selectUser.apellido">
+                      </div>
+                    </div>                 
+                  <div class="container">
+                    <div class="row">
+                      <div class="ctn-btn-registrar-usuario">
+                        <button type="submit" class="btn btn-primary" (click)="actualizarBike()">
+                          <i class="fas fa-plus-circle"></i> Actualizar Bicicleta
+                        </button>
+                      </div>
+                      <div class="ctn-btn-registrar-usuario">
+                        <button type="reset" class="btn btn-secondary" (click)="resetForm(userForm)">
+                          <i class="fas fa-sync-alt"></i> Limpiar Formulario
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>      
+      </div>
     </div>
   </div>
 </div>
 </div>
+
+<!-- Large modal Bicicleta-->
+<div class="modal fade bd-example-modal-lg3" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <h1>Codigo QR del usuario</h1>
+        <ngx-qrcode [qrc-element-type]="elementType" [qrc-value] = "keyUsuario"></ngx-qrcode>
+    </div>
+  </div>
+</div>
+  

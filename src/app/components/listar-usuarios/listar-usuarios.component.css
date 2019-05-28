@@ -58,7 +58,7 @@ span {
 #sidebar {
     min-width: 280px;
     max-width: 280px;
-    background: #7386D5;
+    background: #00498B;
     color: #fff;
     transition: all 0.3s;
 }
@@ -193,8 +193,8 @@ a.article:hover {
 /* ---------------------------------------------------
     CONTENT STYLE
 ----------------------------------------------------- */
-.col{
-    border: 1px solid red;
+.grid{
+    border: 1px solid rgb(44, 43, 43);
 }
 .btn-editar{
     padding: 5px;
@@ -239,6 +239,10 @@ a.article:hover {
     padding: 20px;
     min-height: 100vh;
     transition: all 0.3s;
+}
+.conten-formulario{
+    display: flex;
+    justify-content: center;
 }
 
 /* ---------------------------------------------------

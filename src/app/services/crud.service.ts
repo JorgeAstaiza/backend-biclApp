@@ -16,12 +16,13 @@ export class CrudService {
   selectUser: Usuario = new Usuario();
   selectIncentivo: Incentivos = new Incentivos();
   selectedBicicleta: Bicicleta = new Bicicleta();
-
+  contadorBici: number = 0;
   constructor(public firebase: AngularFireDatabase) {
    }
 
   insertBicicleta(bicicleta: Bicicleta){
-    firebase.database().ref('users/' + bicicleta.identificacion + '/bicicletas' ).set({
+    this.contadorBici = 0;
+    firebase.database().ref('bicicletas/' + bicicleta.identificacion ).set({
       color: bicicleta.color,
       marca: bicicleta.marca,
       serial: bicicleta.serial,
@@ -55,6 +56,18 @@ export class CrudService {
         //avatar: user.avatar
       });
     }
+    updateUser(user: Usuario){
+      firebase.database().ref('users/' + user.identificacion).update({
+        nombre: user.nombre,
+        apellido: user.apellido,
+        carrera: user.carrera,
+        semestre: user.semestre,
+        tipo: user.tipo,
+        email: user.email,
+        genero: user.genero,
+        tipoid: user.tipoid
+      })
+    }
   getIncentivos(){
     return this.incentivosList = this.firebase.list('incentivos');
   }
@@ -62,21 +75,16 @@ export class CrudService {
     return this.userList = this.firebase.list('users');
   }
   getBicicleta(){
-    return this.bicicletaList = this.firebase.list('bicicletas');
+    return this.bicicletaList = this.firebase.list('/bicicletas');
   }
-  updateUser(user: Usuario){
-    this.userList.update(user.$key, {
-      nombre: user.nombre,
-      apellido: user.apellido,
-      carrera: user.carrera,
-      id: user.identificacion,
-      avatar: user.avatar
-    })
-  }
+ 
   deleteProduct($key:string){
     this.userList.remove($key);
   }
   setAvatar(avatar, uid){
     return this.firebase.object('/users/'+ uid + '/avatar').set(avatar);
+  }
+  setAvatarBike(avatar, uid){
+    return this.firebase.object( '/bicicletas/' + uid + '/avatar').set(avatar);
   }
 }

@@ -4,6 +4,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Route, RouterModule } from '@angular/router' 
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
+import { ToastrModule } from 'ngx-toastr'
 
 import { AppComponent } from './app.component';
 import { RegistrarseComponent } from './components/registrarse/registrarse.component';
@@ -45,7 +47,8 @@ const routes: Route[] = [
   {path: 'reporte', component: ReporteComponent, canActivate:[AutenticacionGuard]},
   {path: 'listar-usuarios', component: ListarUsuariosComponent, canActivate:[AutenticacionGuard]},
   {path: 'listar-incentivos', component: ListarIncentivosComponent, canActivate:[AutenticacionGuard]},
-  {path: 'codeqr', component: CodeqrComponent, canActivate:[AutenticacionGuard]}
+  {path: 'codeqr', component: CodeqrComponent, canActivate:[AutenticacionGuard]},
+  {path: 'registrar-bicicleta', component: RegistrarBicicletaComponent, canActivate:[AutenticacionGuard]}
 
 ]
 
@@ -75,7 +78,9 @@ const routes: Route[] = [
     AngularFireAuthModule,
     AngularFireStorageModule,
     NgxQRCodeModule,
-    ImageCropperModule
+    ImageCropperModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot()
   ],
   providers: [AutorizacionService, AutenticacionGuard, CrudService],
   bootstrap: [AppComponent]

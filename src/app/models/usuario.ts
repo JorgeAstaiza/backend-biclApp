@@ -9,5 +9,5 @@ export class Usuario {
     email: string;
     genero: string;
     avatar?: string;
-    tipoid:string;
+    tipoid: string;
 }

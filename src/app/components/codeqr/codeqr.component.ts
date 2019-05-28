@@ -26,7 +26,7 @@ export class CodeqrComponent implements OnInit {
           x["$key"] = element.key;
           this.userList.push(x as Usuario)
           console.log(this.userList);
-          this.value = JSON.stringify(this.userList);
+          this.value = x["$key"];
 
         })
       })
