@@ -6,37 +6,37 @@ import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { ToastrModule } from 'ngx-toastr'
-
+/**Componentes */
 import { AppComponent } from './app.component';
 import { RegistrarseComponent } from './components/registrarse/registrarse.component';
 import { InicioComponent } from './components/inicio/inicio.component';
 import { LoginComponent } from './components/login/login.component';
-//import de chart.js
-import { ChartsModule } from 'ng2-charts';
 import { RegistrarUsuarioComponent } from './components/registrar-usuario/registrar-usuario.component';
 import { IncentivosComponent } from './components/incentivos/incentivos.component';
 import { ReporteComponent } from './components/reporte/reporte.component'
-//servicio
+import { ListarUsuariosComponent } from './components/listar-usuarios/listar-usuarios.component';
+import { ListarIncentivosComponent } from './components/listar-incentivos/listar-incentivos.component';
+import { CodeqrComponent } from './components/codeqr/codeqr.component';
+import { RegistrarBicicletaComponent } from './components/registrar-bicicleta/registrar-bicicleta.component';
+import { ListarBicisComponent } from './components/listar-bicis/listar-bicis.component';
+//import de chart.js
+import { ChartsModule } from 'ng2-charts';
+//servicios
 import { AutorizacionService } from './services/autorizacion.service';
+import { AutenticacionGuard } from './services/autenticacion.guard';
+import { CrudService } from './services/crud.service';
 //firebase
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFireAuth, AngularFireAuthModule } from '@angular/fire/auth'
-import { AngularFireStorageModule } from '@angular/fire/storage'
+import { AngularFireStorageModule } from '@angular/fire/storage';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
 
 import { environment } from '../environments/environment';
-import { ListarUsuariosComponent } from './components/listar-usuarios/listar-usuarios.component';
-import { ListarIncentivosComponent } from './components/listar-incentivos/listar-incentivos.component';
-import { AutenticacionGuard } from './services/autenticacion.guard';
-import { CrudService } from './services/crud.service';
-import { CodeqrComponent } from './components/codeqr/codeqr.component';
 // generador codigo qr
 import { NgxQRCodeModule } from 'ngx-qrcode2'
 // cortar imagenes
 import { ImageCropperModule } from 'ngx-image-cropper';
-import { RegistrarBicicletaComponent } from './components/registrar-bicicleta/registrar-bicicleta.component';
-
-
 
 const routes: Route[] = [
   {path: '', component: LoginComponent},
@@ -48,8 +48,9 @@ const routes: Route[] = [
   {path: 'listar-usuarios', component: ListarUsuariosComponent, canActivate:[AutenticacionGuard]},
   {path: 'listar-incentivos', component: ListarIncentivosComponent, canActivate:[AutenticacionGuard]},
   {path: 'codeqr', component: CodeqrComponent, canActivate:[AutenticacionGuard]},
-  {path: 'registrar-bicicleta', component: RegistrarBicicletaComponent, canActivate:[AutenticacionGuard]}
-
+  {path: 'registrar-bicicleta', component: RegistrarBicicletaComponent, canActivate:[AutenticacionGuard]},
+  {path: 'listar-bicicletas', component: ListarBicisComponent, canActivate:[AutenticacionGuard]}
+  
 ]
 
 @NgModule({
@@ -64,7 +65,8 @@ const routes: Route[] = [
     ListarUsuariosComponent,
     ListarIncentivosComponent,
     CodeqrComponent,
-    RegistrarBicicletaComponent
+    RegistrarBicicletaComponent,
+    ListarBicisComponent
   ],
   imports: [
     BrowserModule,
@@ -77,6 +79,7 @@ const routes: Route[] = [
     AngularFireDatabaseModule,
     AngularFireAuthModule,
     AngularFireStorageModule,
+    AngularFirestoreModule,
     NgxQRCodeModule,
     ImageCropperModule,
     BrowserAnimationsModule,

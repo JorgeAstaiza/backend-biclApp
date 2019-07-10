@@ -3,11 +3,10 @@
   <nav id="sidebar">
     <div class="sidebar-header">
       <img class="logo" src="../../../assets/imagenes/Uni.png" alt="">
-      <img class="logo-reducido" src="img/logo-reducido.png" alt="">
     </div>
     <ul class="list-unstyled components">
       <li>
-        <a href="index.html" class="dropdown-toggle">
+        <a routerLink="/inicio" class="dropdown-toggle">
           <i class="fas fa-key"></i>
           Inicio
         </a>
@@ -15,14 +14,20 @@
       <li>
         <a href="#usuarios" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
           <i class="fas fa-users"></i>
-          Registrar usuario
+          Registrar
         </a>
         <ul class="collapse list-unstyled" id="usuarios">
           <li>
-            <a routerLink="/registrar-usuario">Registrar</a>
+            <a routerLink="/registrar-usuario">Registrar Usuario</a>
+          </li>
+          <li>
+            <a routerLink="/registrar-bicicleta">Registrar Bicicleta</a>
           </li>
           <li>
             <a routerLink="/listar-usuarios">Listar usuarios</a>
+          </li>
+          <li>
+            <a routerLink="/listar-bicicletas">Listar Bicicletas</a>
           </li>
         </ul>
       </li>
@@ -45,10 +50,7 @@
             <a routerLink="/listar-incentivo">Listar incentivos</a>
           </li>
         </ul>
-        <a href="autorizaciones.html" class="dropdown-toggle">
-          <i class="fas fa-key"></i>
-          Autorizaciones
-        </a>
+        
       </li>
       <li>
         <a (click)="logout()">
@@ -67,76 +69,231 @@
         <p>Bienvenido al Team Bike</p>
       </div>
     </nav>
-    <div class="form-group">
+    <div class="form-group input-busqueda">
       <div class="input-group mb-3">
         <div class="input-group-prepend">
           <label class="input-group-text" for="inputGroupSelect01">Tipo de usuario</label>
         </div>
-        <select [(ngModel)]="opcionSeleccionado" (change)="capturar()" class="custom-select" id="inputGroupUsers" name="usuarios">
+        <select [(ngModel)]="opcionSeleccionado" (change)="capturar()" class="custom-select" id="inputGroupUsers" name="usuarios" >
           <option selected value="0">Seleccionar</option>
-          <option *ngFor="let usuario of poblacion" >
+          <option *ngFor="let usuario of poblacion">
             {{usuario}}
-          </option>
+          </option> 
         </select>
-        <!--<p [hidden]="opcionSeleccionado == 0">Haz seleccionado la opcion {{verSeleccion}} </p>-->
+        <div *ngIf="opcionSeleccionado" style="display: none;">
+          <input type="text" value="{{opcionSeleccionado}}" name="tipo">
+        </div>
       </div>
       <div class="input-group mb-3" [ngStyle]="{display: (visible) ? 'flex': 'none'}">
         <div class="input-group-prepend">
           <label class="input-group-text" for="inputGroupSelect01">Semestre</label>
         </div>
-        <select class="custom-select" id="inputGroupSemestres">
+        <select [(ngModel)]="semestreSeleccionado" class="custom-select" id="inputGroupSemestres">
           <option selected>Seleccionar</option>
           <option *ngFor="let semestre of semestres">
             {{semestre}}
           </option>
         </select>
+        <div *ngIf="semestreSeleccionado" style="display: none;">
+          <input type="text" value="{{semestreSeleccionado}}" name="semestre">
+        </div>
       </div>
       <div class="input-group mb-3" [ngStyle]="{display: (visible) ? 'flex': 'none'}">
         <div class="input-group-prepend">
           <label class="input-group-text" for="inputGroupSelect01">Carrera</label>
         </div>
-        <select class="custom-select" id="inputGroupCarreras">
+        <select [(ngModel)]="carreraSeleccionado" class="custom-select" id="inputGroupCarreras">
           <option selected>Seleccionar</option>
           <option *ngFor="let carrera of carreras">
             {{carrera}}
           </option>
         </select>
-      </div>
-      
-    </div>
-    <div class="container">
-      <div class="row">
-        <div class="col">Nombre Incentivo</div>
-        <div class="col">Reponsable</div>
-        <div class="col">Vigencia</div>
-        <div class="col">Descripcion</div>
-        <div class="col">Acciones</div>
-
-      </div>
-    </div>
-    <div class="container">
-      <div class="row">
-        <div class="col">Decimas en gestion ambiental</div>
-        <div class="col">Docente rosa melano</div>
-        <div class="col">de: 15/04/19 a: 17/05/19</div>
-        <div class="col">El estudiante que mas haya venido en bicicleta el mes de abril se le dara 5 decimas a a nota final</div>
-        <div class="col btns">
-          <a href="" class="btn-editar"><i class="fas fa-edit"></i>Editar</a>
-          <a href="" class="btn-eliminar"><i class="far fa-trash-alt"></i>Eliminar</a>
+        <div *ngIf="carreraSeleccionado" style="display: none;">
+          <input type="text" value="{{carreraSeleccionado}}" name="carrera">
         </div>
       </div>
+      <div class="col btn-consultar-usuario">
+        <button class="btn btn-success" (click)="consultaPersonalizada()">Consultar</button>
+      </div>
     </div>
-    <div class="container">
-      <div class="row">
-        <div class="col">Empanadas con cafe gratis</div>
-        <div class="col">Cafeteria</div>
-        <div class="col">de: 15/04/19 a: 17/05/19</div>
-        <div class="col">El estudiante que mas haya venido en bicicleta el mes de abril se le dara empanadas con cafe</div>
-        <div class="col btns">
-          <a href="" class="btn-editar"><i class="fas fa-edit"></i>Editar</a>
-          <a href="" class="btn-eliminar"><i class="far fa-trash-alt"></i>Eliminar</a>
+
+    <div class="container" *ngIf="incentivoConsultado.length > 0; else noincentivos">
+      <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Titulo del Incentivo</th>
+                <th>Responsable</th>
+                <th>publico</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody  >
+            <tr *ngFor="let incentivos of incentivoConsultado; let indice=index">
+              <td>{{incentivos.titulo}}</td>
+              <td>{{incentivos.responsable}}</td>
+              <td>{{incentivos.tipo}}</td>
+              <td>
+                <div class="col btns">
+                  <button class="btn mr-3 btn-success" (click)="editIncentivo($event, incentivos)"><i
+                      class="fas fa-edit"></i>Editar</button>
+                  <button class="btn mr-3 btn-danger" (click)="onDelete()"><i class="far fa-trash-alt"></i>Eliminar</button>
+                </div>
+              </td>
+              <div *ngIf="editando">
+                <form (ngSubmit)="updateIncentivo()" autocomplete="off">
+                  <div class="form-row">
+                    <div class="form-group col-md-6">
+                      <label for="titulo-incentivo">Titulo del incentivo *</label>
+                      <input type="text" class="form-control" placeholder="Titulo del incentivo" name="titulo" #titulo="ngModel"
+                        [(ngModel)]="editIncentivo.titulo">
+                    </div>
+                    <div class="form-group col-md-6">
+                      <label>Responsable *</label>
+                      <input type="text" class="form-control" placeholder="Persona a cargo" name="responsable" #responsable="ngModel"
+                        [(ngModel)]="editIncentivo.responsable">
+                    </div>
+                  </div>
+                  <label class="lb-incentivo">El incentivo va dirigido a: *</label>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <label class="input-group-text" for="inputGroupSelect01">Tipo de usuario</label>
+                    </div>
+                    <select [(ngModel)]="editIncentivo.tipo" (change)="capturar()" class="custom-select" id="inputGroupUsers" name="tipo">
+                      <option selected>{{editIncentivo.tipo}}</option>
+                      <option *ngFor="let usuario of poblacion">
+                        {{usuario}}
+                      </option>
+                    </select>
+                    
+                    
+                  </div>
+                  <div class="input-group mb-3" [ngStyle]="{display: (visible) ? 'flex': 'none'}">
+                    <div class="input-group-prepend">
+                      <label class="input-group-text" for="inputGroupSelect01">Semestre</label>
+                    </div>
+                    <select class="custom-select" id="inputGroupSemestres" [(ngModel)]="editIncentivo.semestre" (change)="semestreUsuario()"
+                      name="semestre">
+                      <option selected>{{editIncentivo.semestre}}</option>
+                      <option *ngFor="let semestre of semestres">
+                        {{semestre}}
+                      </option>
+                    </select>
+                   
+                  </div>
+                  <div class="input-group mb-3" [ngStyle]="{display: (visible) ? 'flex': 'none'}">
+                    <div class="input-group-prepend">
+                      <label class="input-group-text" for="inputGroupSelect01">Carrera</label>
+                    </div>
+                    <select class="custom-select" id="inputGroupCarreras" [(ngModel)]="editIncentivo.carrera" (change)="carreraUsuario()"
+                      name="carrera">
+                      <option selected>{{editIncentivo.carrera}}</option>
+                      <option *ngFor="let carrera of carreras">
+                        {{carrera}}
+                      </option>
+                    </select>
+                    
+                  </div>
+                  <div class="form-group">
+                    <label class="lb-decripcion">Descripcion *</label>
+                    <textarea class="form-control" id="validationTextarea" placeholder="Describe que tipo de incentivo se dara"
+                      name="descripcion" #descripcion="ngModel" [(ngModel)]="editIncentivo.descripcion" required></textarea>
+                  </div>
+                  <div class="form-group row">
+                    <label for="example-datetime-local-input" class="col-2 col-form-label">Fecha de inicio *</label>
+                    <div class="col-10">
+                      <input class="form-control" type="date" name="fechaInicio" #fechaInicio="ngModel"
+                        [(ngModel)]="editIncentivo.fechaInicio">
+                    </div>
+                    
+                  </div>
+                  <div class="form-group row">
+                    <label for="example-datetime-local-input" class="col-2 col-form-label">Fecha de fin *</label>
+                    <div class="col-10">
+                      <input class="form-control" type="date" value="2011-08-19T13:45:00" name="fechaFin" #fechaFin="ngModel"
+                        [(ngModel)]="editIncentivo.fechaFin">
+                    </div>
+                    
+                  </div>
+                  <div class="ctn-btn-guardar-incentivo">
+                    <button type="submit" class="btn btn-primary">Actualizar incentivo</button>
+                  </div>
+                  <div class="ctn-btn-registrar-usuario">
+                    <button type="reset" class="btn btn-secondary" (click)="resetForm(incentivoForm)">
+                      <i class="fas fa-sync-alt"></i> Limpiar Formulario
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </tr>
+        </tbody>
+      </table> 
+    </div>    
+  </div>
+</div>
+<ng-template #noincentivos> 
+  <p>Consulta un incentivo</p>
+</ng-template>
+
+<!-- Modal 
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Actualizar Incentivo</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button> 
+      </div>
+      <div class="modal-body"> 
+        <div class="contenedor-formulario">
+          <form class="form-crear-incentivo" #incentivoForm="ngForm" (ngSubmit)="onSubmitIncentivo(incentivoForm)" autocomplete="off">
+            <input type="hidden" name="$key" #key="ngModel" [(ngModel)]="crudService.selectIncentivo.$key">
+            
+            
+            
+            
+            <div class="input-group mb-3" [ngStyle]="{display: (chekeado) ? 'flex': 'none'}">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="inputGroupSelect01">Semestre</label>
+              </div>
+              <select class="custom-select" id="inputGroupSemestres" [(ngModel)]="semestreSeleccionado"
+                (change)="semestreUsuario()" name="semestre">
+                <option selected>Seleccionar</option>
+                <option *ngFor="let semestre of semestres">
+                  {{semestre}}
+                </option>
+              </select>
+              <div *ngIf="semestreSeleccionado" style="display: none;">
+                <input type="text" value="{{semestreSeleccionado}}" name="semestre" #semestre="ngModel"
+                  [(ngModel)]="crudService.selectIncentivo.semestre">
+              </div>
+            </div>
+            <div class="input-group mb-3" [ngStyle]="{display: (chekeado) ? 'flex': 'none'}">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="inputGroupSelect01">Carrera</label>
+              </div>
+              <select class="custom-select" id="inputGroupCarreras" [(ngModel)]="carreraSeleccionada"
+                (change)="carreraUsuario()" name="carrera">
+                <option selected>Seleccionar</option>
+                <option *ngFor="let carrera of carreras">
+                  {{carrera}}
+                </option>
+              </select>
+              <div *ngIf="carreraSeleccionada" style="display: none;">
+                <input type="text" value="{{carreraSeleccionada}}" name="carrera" #carrera="ngModel"
+                  [(ngModel)]="crudService.selectIncentivo.carrera">
+              </div>
+            </div>
+        
+            
+            
+            
+            
+          </form>
+        
         </div>
       </div>
     </div>
   </div>
-</div>
+</div>-->

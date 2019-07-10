@@ -15,14 +15,20 @@
       <li>
         <a href="#usuarios" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
           <i class="fas fa-users"></i>
-          Registrar usuario
+          Registrar
         </a>
         <ul class="collapse list-unstyled" id="usuarios">
           <li>
-            <a routerLink="/registrar-usuario">Registrar</a>
+            <a routerLink="/registrar-usuario">Registrar Usuario</a>
+          </li>
+          <li>
+            <a routerLink="/registrar-bicicleta">Registrar Bicicleta</a>
           </li>
           <li>
             <a routerLink="/listar-usuarios">Listar usuarios</a>
+          </li>
+          <li>
+            <a routerLink="/listar-bicicletas">Listar Bicicletas</a>
           </li>
         </ul>
       </li>
@@ -45,10 +51,7 @@
             <a routerLink="/listar-incentivos">Listar incentivos</a>
           </li>
         </ul>
-        <a href="autorizaciones.html" class="dropdown-toggle">
-          <i class="fas fa-key"></i>
-          Autorizaciones
-        </a>
+        
       </li>
       <li>
         <a (click)="logout()">
@@ -67,16 +70,16 @@
       </div>
     </nav>
     <div class="contenedor-formulario">
-      <form class="form-crear-incentivo" #incentivoForm="ngForm" (ngSubmit)="onSubmitIncentivo(incentivoForm)">
+      <form class="form-crear-incentivo" #incentivoForm="ngForm" (ngSubmit)="addIncentivo(incentivoForm)" autocomplete="off">
         <h1 class="titulo-login">Ingresar incentivo</h1>
         <div class="form-row">
           <div class="form-group col-md-6">
            <label for="titulo-incentivo">Titulo del incentivo *</label>
-           <input type="text" class="form-control" placeholder="Titulo del incentivo" name="titulo" #titulo="ngModel" [(ngModel)]="crudService.selectIncentivo.titulo">
+           <input type="text" class="form-control" placeholder="Titulo del incentivo" name="titulo" #titulo="ngModel" [(ngModel)]="incentivos.titulo">
           </div>
           <div class="form-group col-md-6">
            <label>Responsable *</label>
-           <input type="text" class="form-control" placeholder="Persona a cargo" name="responsable" #responsable="ngModel" [(ngModel)]="crudService.selectIncentivo.responsable">
+           <input type="text" class="form-control" placeholder="Persona a cargo" name="responsable" #responsable="ngModel" [(ngModel)]="incentivos.responsable">
           </div>
         </div>
         <label class="lb-incentivo">El incentivo va dirigido a: *</label>
@@ -84,97 +87,56 @@
           <div class="input-group-prepend">
             <label class="input-group-text" for="inputGroupSelect01">Tipo de usuario</label>
           </div>
-          <select [(ngModel)]="tipoSeleccionado" (change)="capturar()" class="custom-select" id="inputGroupUsers" name="tipo">
-            <option selected value="0">Seleccionar</option>
+          <select [(ngModel)]="incentivos.tipo" (change)="capturar()" class="custom-select" id="inputGroupUsers" name="tipo">
+            <option selected> </option>
             <option *ngFor="let usuario of poblacion" >
               {{usuario}}
             </option>
           </select>
-          <div *ngIf="tipoSeleccionado" style="display: none;">
-            <input type="text" value="{{tipoSeleccionado}}" name="tipo" #tipo="ngModel" [(ngModel)]="crudService.selectIncentivo.tipo">
-          </div>
         </div>
         <div class="input-group mb-3" [ngStyle]="{display: (visible) ? 'flex': 'none'}">
           <div class="input-group-prepend">
             <label class="input-group-text" for="inputGroupSelect01">Semestre</label>
           </div>
-          <select class="custom-select" id="inputGroupSemestres" [(ngModel)]="semestreSeleccionado" (change)="semestreUsuario()" name="semestre">
-            <option selected>Seleccionar</option>
+          <select class="custom-select" id="inputGroupSemestres" [(ngModel)]="incentivos.semestre" (change)="semestreUsuario()" name="semestre">
+            <option selected> </option>
             <option *ngFor="let semestre of semestres">
               {{semestre}}
             </option>
           </select>
-          <div *ngIf="semestreSeleccionado" style="display: none;">
-            <input type="text" value="{{semestreSeleccionado}}" name="semestre" #semestre="ngModel" [(ngModel)]="crudService.selectIncentivo.semestre">
-          </div>
         </div>
         <div class="input-group mb-3" [ngStyle]="{display: (visible) ? 'flex': 'none'}">
           <div class="input-group-prepend">
             <label class="input-group-text" for="inputGroupSelect01">Carrera</label>
           </div>
-          <select class="custom-select" id="inputGroupCarreras" [(ngModel)]="carreraSeleccionada" (change)="carreraUsuario()" name="carrera">
-            <option selected>Seleccionar</option>
+          <select class="custom-select" id="inputGroupCarreras" [(ngModel)]="incentivos.carrera" (change)="carreraUsuario()" name="carrera">
+            <option selected> </option>
             <option *ngFor="let carrera of carreras">
               {{carrera}}
             </option>
           </select>
-          <div *ngIf="carreraSeleccionada" style="display: none;">
-            <input type="text" value="{{carreraSeleccionada}}" name="carrera" #carrera="ngModel" [(ngModel)]="crudService.selectIncentivo.carrera">
-          </div>
         </div>
-        <div class="input-group mb-3" [ngStyle]="{display: (chekeado) ? 'flex': 'none'}">
-          <div class="input-group-prepend">
-            <label class="input-group-text" for="inputGroupSelect01">Semestre</label>
-          </div>
-          <select class="custom-select" id="inputGroupSemestres" [(ngModel)]="semestreSeleccionado" (change)="semestreUsuario()" name="semestre">
-            <option selected>Seleccionar</option>
-            <option *ngFor="let semestre of semestres">
-              {{semestre}}
-            </option>
-          </select>
-          <div *ngIf="semestreSeleccionado" style="display: none;">
-            <input type="text" value="{{semestreSeleccionado}}" name="semestre" #semestre="ngModel" [(ngModel)]="crudService.selectIncentivo.semestre">
-          </div>
-        </div>
-        <div class="input-group mb-3" [ngStyle]="{display: (chekeado) ? 'flex': 'none'}">
-          <div class="input-group-prepend">
-            <label class="input-group-text" for="inputGroupSelect01">Carrera</label>
-          </div>
-          <select class="custom-select" id="inputGroupCarreras" [(ngModel)]="carreraSeleccionada" (change)="carreraUsuario()" name="carrera">
-            <option selected>Seleccionar</option>
-            <option *ngFor="let carrera of carreras">
-              {{carrera}}
-            </option>
-          </select>
-          <div *ngIf="carreraSeleccionada" style="display: none;">
-            <input type="text" value="{{carreraSeleccionada}}" name="carrera" #carrera="ngModel" [(ngModel)]="crudService.selectIncentivo.carrera">
-          </div>
-        </div>
-        
+                
         <div class="form-group">
           <label class="lb-decripcion">Descripcion *</label>
-          <textarea class="form-control" id="validationTextarea" placeholder="Describe que tipo de incentivo se dara" name="descripcion" #descripcion="ngModel" [(ngModel)]="crudService.selectIncentivo.descripcion" required></textarea>
+          <textarea class="form-control" id="validationTextarea" placeholder="Describe que tipo de incentivo se dara" name="descripcion" #descripcion="ngModel" [(ngModel)]="incentivos.descripcion" required></textarea>
         </div>
         <div class="form-group row">
           <label for="example-datetime-local-input" class="col-2 col-form-label">Fecha de inicio *</label>
           <div class="col-10">
-            <input class="form-control" type="date" name="fechaInicio" #fechaInicio="ngModel" [(ngModel)]="crudService.selectIncentivo.fechaInicio">
+            <input class="form-control" type="date" name="fechaInicio" #fechaInicio="ngModel" [(ngModel)]="incentivos.fechaInicio">
           </div>
-          <div *ngIf="fechaInicio" style="display: none;">
-            <input type="text" value="{{fechaInicio}}" name="fechaInicio" #fechaInicio="ngModel" [(ngModel)]="crudService.selectIncentivo.fechaInicio">
-          </div>
+         
         </div>
         <div class="form-group row">
           <label for="example-datetime-local-input" class="col-2 col-form-label">Fecha de fin *</label>
           <div class="col-10">
-            <input class="form-control" type="date" value="2011-08-19T13:45:00" name="fechaFin" #fechaFin="ngModel" [(ngModel)]="crudService.selectIncentivo.fechaFin">
+            <input class="form-control" type="date" value="2011-08-19T13:45:00" name="fechaFin" #fechaFin="ngModel" [(ngModel)]="incentivos.fechaFin">
           </div>
-          <div *ngIf="fechaInicio" style="display: none;">
-            <input type="text" value="{{fechaFin}}" name="fechaFin" #fechaFin="ngModel" [(ngModel)]="crudService.selectIncentivo.fechaFin">
-          </div>
+          
         </div>
         <div class="ctn-btn-guardar-incentivo">
-          <button type="submit" class="btn btn-primary">Guardar incentivo</button>
+          <button type="submit" class="btn btn-primary" (click)="comprobarFormulario()">Guardar incentivo</button>
         </div>
         <div class="ctn-btn-registrar-usuario">
           <button type="reset" class="btn btn-secondary" (click)="resetForm(incentivoForm)">

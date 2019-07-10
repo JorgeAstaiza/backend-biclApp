@@ -3,7 +3,6 @@
   <nav id="sidebar">
     <div class="sidebar-header">
       <img class="logo" src="../../../assets/imagenes/Uni.png" alt="">
-      <img class="logo-reducido" src="img/logo-reducido.png" alt="">
     </div>
     <ul class="list-unstyled components">
       <li>
@@ -15,14 +14,20 @@
       <li>
         <a href="#usuarios" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
           <i class="fas fa-users"></i>
-          Registrar usuario
+          Registrar
         </a>
         <ul class="collapse list-unstyled" id="usuarios">
           <li>
-            <a routerLink="/registrar-usuario">Registrar</a>
+            <a routerLink="/registrar-usuario">Registrar Usuario</a>
+          </li>
+          <li>
+            <a routerLink="/registrar-bicicleta">Registrar Bicicleta</a>
           </li>
           <li>
             <a routerLink="/listar-usuarios">Listar usuarios</a>
+          </li>
+          <li>
+            <a routerLink="/listar-bicicletas">Listar Bicicletas</a>
           </li>
         </ul>
       </li>
@@ -45,12 +50,9 @@
             <a routerLink="/listar-incentivos">Listar incentivos</a>
           </li>
         </ul>
-        <a href="autorizaciones.html" class="dropdown-toggle">
-          <i class="fas fa-key"></i>
-          Autorizaciones
-        </a>
+        
       </li>
-      <li>
+      <li> 
         <a (click)="logout()">
           <i class="fas fa-image"></i>
           Cerrar Sesion
@@ -67,38 +69,8 @@
         <p>Bienvenido al Team Bike</p>
       </div>
     </nav>
-    <form>
-      <div class="ctn-opcion-reporte-inicio container">
-        <div class="row">
-          <p class="col-3">Personaliza tu top 5: </p>
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="inputGroupSelect01">Poblacion</label>
-            </div>
-            <select class="custom-select" id="poblacion">
-              <option *ngFor="let usuario of poblacion">
-                {{usuario}}
-              </option>
-            </select>
-          </div>
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="inputGroupSelect01">Tiempo</label>
-            </div>
-            <select class="custom-select" id="Tiempo">
-              <option *ngFor="let fecha of tiempo">
-                {{fecha}}
-              </option>
-            </select>
-          </div>
-        </div>
-      </div>
-    </form>
-    <canvas baseChart
-      [datasets]= "barChartData"
-      [labels]= "barChartLabels"
-      [options]= "barChartOptions"
-      [legend]= "barChartLegend"
-      [chartType]= "barChartType"></canvas>    
+    <canvas id="canvas">
+      {{chart}}
+    </canvas>    
   </div>
-</div>
+</div> 

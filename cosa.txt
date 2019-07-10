@@ -1,0 +1,201 @@
+<!-- Large modal Estudiante-->
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="contenedor-formulario">
+        <div id="profileContainer">
+            <div class="container conten-formulario">
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="avatarFrameonline">
+                    <img [src]="croppedImage" />
+                    
+                  </div>
+                  <hr />
+                                        
+                </div>
+                <div class="contenedor-formulario">
+                  <div class="col-5 ctn-foto-usuario">
+                    <label for="file-upload" class="custom-file-upload">
+                      <i class="fa fa-cloud-upload"></i> Subir foto de usuario
+                    </label>
+                    <input id="file-upload" type="file" (change)="fileChangeEvent($event)" />
+                  </div>
+                  <div>
+                    <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true" [aspectRatio]="1 / 1"
+                      [resizeToWidth]="128" [cropperMinWidth]="128" [onlyScaleDown]="true" [roundCropper]="false" format="png"
+                      outputType="base64" (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()"
+                      (cropperReady)="cropperReady()" (loadImageFailed)="loadImageFailed()"></image-cropper>
+                  </div>
+                  <form class="form-registrar-usuario" #userForm="ngForm" (ngSubmit)="onSubmit(userForm)" autocomplete="off">
+                    <h1 class="titulo-login">Datos de Usuario</h1>
+                    
+                    <div class="form-row">
+                      <div class="form-group col-md-6">
+                        <label for="nombre-usuario">Nombres</label>
+                        <input type="text" class="form-control" id="nombre-usuario" placeholder="Nombre(s)" name="nombre" [(ngModel)]="editingUser.nombre">
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label>Apellido</label>
+                        <input type="text" class="form-control" placeholder="Apellido(s)" name="apellido" [(ngModel)]="editingUser.apellido">
+                      </div>
+                    </div>
+                    
+                    <div class="form-group">
+                      <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <label class="input-group-text" for="inputGroupSelect01">Tipo de usuario</label>
+                        </div>
+                        <select [(ngModel)]="editingUser.tipo" (change)="capturar()" class="custom-select" id="inputGroupUsers" name="tipo">
+                          <option selected>{{editingUser.tipo}}</option>
+                          <option *ngFor="let usuario of poblacion" >
+                            {{usuario}}
+                          </option>
+                        </select>
+                        <!--
+                        <div style="display: none">
+                          <input type="text" value="{{tipoSeleccionado}}" name="tipo" #tipo="ngModel" [(ngModel)]="crudService.selectUser.tipo">
+                        </div>
+                        -->
+                      </div>
+                      <div class="input-group mb-3" >
+                          <div class="input-group-prepend">
+                            <label class="input-group-text" for="inputGroupSelect01">Genero</label>
+                          </div>
+                          <select [(ngModel)]="editingUser.genero" (change)="generoUsuario()" class="custom-select" id="inputGroupUsers" name="genero">
+                            <option selected>{{editingUser.genero}}</option>
+                            <option *ngFor="let sexo of genero" >
+                              {{sexo}}
+                            </option>
+                          </select>
+                          
+                        </div>
+                      <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <label class="input-group-text" for="inputGroupSelect01">Tipo de identificacion</label>
+                        </div>
+                        <select class="custom-select" id="inputGroupIds" [(ngModel)]="editingUser.tipoid" (change)="idUsuario()" name="tipoid">
+                          <option selected>{{editingUser.genero}}</option>
+                          <option *ngFor="let id of identificaciones" >
+                            {{id}}
+                          </option>
+                        </select>
+                        
+                      </div>
+                      <div class="input-group mb-3" [ngStyle]="{display: (visible) ? 'flex': 'none'}">
+                        <div class="input-group-prepend">
+                          <label class="input-group-text" for="inputGroupSelect01">Semestre</label>
+                        </div>
+                        <select class="custom-select" id="inputGroupSemestres" [(ngModel)]="editingUser.semestre" (change)="semestreUsuario()" name="semestre">
+                          <option selected>{{editingUser.semestre}}</option>
+                          <option *ngFor="let semestre of semestres">
+                            {{semestre}}
+                          </option>
+                        </select>
+                        
+                      </div>
+                      <div class="input-group mb-3" [ngStyle]="{display: (visible) ? 'flex': 'none'}">
+                        <div class="input-group-prepend">
+                          <label class="input-group-text" for="inputGroupSelect01">Carrera</label>
+                        </div>
+                        <select class="custom-select" id="inputGroupCarreras" [(ngModel)]="editingUser.carrera" (change)="carreraUsuario()" name="carrera">
+                          <option selected>{{editingUser.carrera}}</option>
+                          <option *ngFor="let carrera of carreras">
+                            {{carrera}}
+                          </option>
+                        </select>
+                        
+                      </div>
+
+                      <div class="form-row">
+                        <div class="form-group col-md-6">
+                          <label for="nombre-usuario">Peso</label>
+                          <input type="text" class="form-control" placeholder="Peso en Kilogramos" name="peso" 
+                          #peso="ngModel" [(ngModel)]="editingUser.peso" required >
+                          <!--
+                          <div *ngIf="peso.touched && !peso.valid">
+                            <p style="color: red;" *ngIf="peso.errors.required">El peso es requerido</p>
+                          </div>
+                          -->
+                        </div>
+                        <div class="form-group col-md-6">
+                          <label>Talla</label>
+                          <input type="text" class="form-control" placeholder="Estatura en metros" name="talla" #talla="ngModel" [(ngModel)]="editingUser.talla" required>
+                          <!--
+                          <div *ngIf="talla.touched && !talla.valid">
+                            <p style="color: red;" *ngIf="talla.errors.required">la talla es requerida</p>
+                          </div>
+                          -->
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-group col-md-6">
+                          <label for="nombre-usuario">Perimetro Abdominal</label>
+                          <input type="text" class="form-control" placeholder="perimetro en centimetros" name="perimetro" 
+                          #perimetro="ngModel" [(ngModel)]="editingUser.perimetro" required >
+                          <!--
+                          <div *ngIf="perimetro.touched && !perimetro.valid">
+                            <p style="color: red;" *ngIf="perimetro.errors.required">El perimetro es requerido</p>
+                          </div>
+                          -->
+                        </div>
+                        <div class="form-group col-md-6">
+                          <label>Telefono</label>
+                          <input type="text" class="form-control" placeholder="Numero telefonico" name="celular" #celular="ngModel" [(ngModel)]="editingUser.celular" required>
+                          <!--
+                          <div *ngIf="celular.touched && !celular.valid">
+                            <p style="color: red;" *ngIf="celular.errors.required">El telefono es requerido</p>
+                          </div>
+                          -->
+                        </div>
+                      </div>
+
+                      <label>Numero de identificacion</label>
+                      <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                        </div>
+                        <input type="number" class="form-control" placeholder="Numero de identificacion" name="identificacion" #identificacion="ngModel" [(ngModel)]="editingUser.identificacion">
+                      </div>
+                      <!--
+                      <div class="form-group">
+                          <label>Correo Electronico</label>
+                          <div class="input-group mb-3">	
+                            <div class="input-group-prepend">
+                              <span class="input-group-text" id="basic-addon1"><i class="fas fa-envelope"></i></span>
+                            </div>
+                            <input type="email" class="form-control" placeholder="Correo electronico" name="email" #email="ngModel" [(ngModel)]="crudService.selectUser.$key" (change)="emailUser()" required>
+                            <div *ngIf="email.touched && !email.valid" >
+                              <p style="color: red;" *ngIf="email.errors.required">El correo es requerido</p>
+                            </div>
+                            <div *ngIf="crudService.selectUser.$key" style="display: none;">
+                              <input type="email" value="{{crudService.selectUser.$key}}" name="emailUs" [(ngModel)]="emailUs">
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                    -->
+                    <div class="container">
+                      <div class="row">
+                        <div class="ctn-btn-registrar-usuario">
+                          <button type="submit" class="btn btn-primary" (click)="actualizar()">
+                            <i class="fas fa-plus-circle"></i> Actualizar Usuario
+                          </button>
+                        </div>
+                        <div class="ctn-btn-registrar-usuario">
+                          <button type="reset" class="btn btn-secondary" (click)="resetForm(userForm)">
+                            <i class="fas fa-sync-alt"></i> Limpiar Formulario
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+            </div>
+          </div>      
+        </div>
+      </div>
+    </div>
+  </div>

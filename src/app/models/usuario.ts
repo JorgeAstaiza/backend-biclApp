@@ -1,13 +1,21 @@
-export class Usuario {
-    $key: string;
+export interface Usuario {
+    id?: string;
     nombre: string;
     apellido: string;
-    tipo: string;
+    tipo?: string;
     carrera?: string;
     semestre?: string;
-    identificacion: string;
+    identificacion?: string;
     email: string;
-    genero: string;
+    genero?: string;
     avatar?: string;
-    tipoid: string;
+    tipoid?: string;
+    celular?: string;
+    fechaNacimiento?: string;
+    peso: number;
+    talla: Float32Array;
+    perimetro: number;
+    contador: number;
+    estado?: boolean
 }
+

@@ -14,10 +14,11 @@ import { Router } from '@angular/router';
   styleUrls: ['./registrar-bicicleta.component.css']
 })
 export class RegistrarBicicletaComponent implements OnInit {
+  bicicleta = {} as Bicicleta
   bikeForm: FormGroup
   registrar: boolean = false;
   tiposBici;
-  userList: Usuario[];
+  userList=[];
   user: Usuario;
   x;
   idUsuario;
@@ -28,48 +29,49 @@ export class RegistrarBicicletaComponent implements OnInit {
   }
   ngOnInit() {
     this.crudService.getUsers()
-      .snapshotChanges()
-      .subscribe(item =>{
-        this.userList = [];
-        item.forEach(element => {
-          this.x = element.payload.toJSON();
-          this.x["$key"] = element.key;          
-          this.userList.push(this.x as Usuario)
-          //console.log(this.userList[$key])
-        })
-      })
-      this.idUsuario = this.x["$key"]
-      //this.crudService.selectUser = user;
+    .subscribe(item =>{
+      this.userList = item;
+      
+    })   
   }
 
   tipoSeleccionado(){
     this.tipoBicicletaSeleccionada;
   }
+ 
   registrarBici(){
-    if(this.crudService.selectedBicicleta.color != null && this.crudService.selectedBicicleta.marca != null && this.crudService.selectedBicicleta.serial != null && this.crudService.selectedBicicleta.identificacion != null){
-      this.registrar = true;
-      
-      console.log('se registro bici en registrar')
+     /*
+    console.log(this.crudService.selectedBicicleta.serial)
+    console.log(this.crudService.selectedBicicleta.color)
+    console.log(this.crudService.selectedBicicleta.tipo)
+    */
 
-    }else{
-      this.toaster.error('error', 'Todos los campos debes estar completos');
+    if(this.bicicleta.id == undefined || this.bicicleta.id == "" ){
+      this.toaster.error('error', 'El serial de la bicicleta es obligatorio');
+    }if(this.bicicleta.color == undefined || this.bicicleta.color == ""){
+      this.toaster.error('error', 'El color de la bicicleta es obligatorio');
+    }if(this.bicicleta.marca == "" || this.bicicleta.marca == undefined){
+      this.toaster.error('error', 'La marca de la bicicleta es obligatorio');
+    }if(this.bicicleta.identificacion == "" || this.bicicleta.identificacion == undefined){
+      this.toaster.error('error', 'La identificacion del usuario es obligatorio');
     }
-  }
+    if(this.tipoBicicletaSeleccionada == '0'){
+      this.toaster.error('error', 'El tipo de bicicleta es obligatorio');
+    }
+  }/*
   resetForm(bikeForm: NgForm){
     if(bikeForm != null){
       bikeForm.reset();
+      this.tipoBicicletaSeleccionada = '0'
       this.crudService.selectedBicicleta = new Bicicleta();
     }
-  }
-  onSubmit(bikeForm: NgForm) {
-    if(bikeForm.valid){
-      this.crudService.insertBicicleta(bikeForm.value);      
-      this.resetForm(bikeForm);
-      this.toaster.success('Operacion Satisfactoria', 'Bicicleta Registrada');
-      this.router.navigate(['listar-usuarios'])
-      console.log('se registro bici onsubmit')
-    }
     
+  }*/ 
+  addBike(bikeForm: NgForm) { 
+    this.crudService.insertBicicleta(this.bicicleta)
+    this.toaster.success('Operacion Satisfactoria', 'Bicicleta Registrada');
+    this.router.navigate(['listar-usuarios'])  
+    bikeForm.reset();
   }
 
 }

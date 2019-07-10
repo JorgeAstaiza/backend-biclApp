@@ -44,7 +44,9 @@ form{
 .contedor-btn-iniciar{
     text-align: center;
 }
-
+.btn-iniciar{
+    color: white !important;
+}
 .contenedor-no-registrado{
     margin-top: 10px;
     text-align: center;

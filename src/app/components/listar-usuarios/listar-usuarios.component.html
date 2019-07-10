@@ -3,7 +3,6 @@
   <nav id="sidebar">
     <div class="sidebar-header">
       <img class="logo" src="../../../assets/imagenes/Uni.png" alt="">
-      <img class="logo-reducido" src="img/logo-reducido.png" alt="">
     </div>
     <ul class="list-unstyled components">
       <li>
@@ -15,14 +14,20 @@
       <li>
         <a href="#usuarios" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
           <i class="fas fa-users"></i>
-          Registrar usuario
-        </a>
+          Registrar
+        </a> 
         <ul class="collapse list-unstyled" id="usuarios">
           <li>
-            <a routerLink="/registrar-usuario">Registrar</a>
+            <a routerLink="/registrar-usuario">Registrar Usuario</a>
+          </li>
+          <li>
+            <a routerLink="/registrar-bicicleta">Registrar Bicicleta</a>
           </li>
           <li>
             <a routerLink="/listar-usuarios">Listar usuarios</a>
+          </li>
+          <li>
+            <a routerLink="/listar-bicicletas">Listar Bicicletas</a>
           </li>
         </ul>
       </li>
@@ -45,10 +50,7 @@
             <a routerLink="/listar-incentivos">Listar incentivos</a>
           </li>
         </ul>
-        <a href="autorizaciones.html" class="dropdown-toggle">
-          <i class="fas fa-key"></i>
-          Autorizaciones
-        </a>
+        
       </li>
       <li>
         <a (click)="logout()">
@@ -68,276 +70,258 @@
       </div>
     </nav>
     <div class="form-group">
+      <h2>Consulta un usuario</h2>
       <div class="container">
         <div class="row">
           <div class="col">
             <div class="input-group mb-3" style="margin: 0 !important">	
               <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-addon1"><i class="far fa-id-badge"></i>Identificacion</span>
+                <span class="input-group-text" id="basic-addon1"><i class="far fa-envelope"></i></span>
               </div>
-              <input type="email" class="form-control" placeholder="Codigo o cedula" aria-label="email"
-                aria-describedby="basic-addon1">
+              <input [(ngModel)]="idUsuario" type="text" class="form-control" placeholder="Email del usuario">
             </div>
           </div>
           <div class="col btn-consultar-usuario">
-            <a href="">Consultar</a>
+            <button class="btn btn-success" (click)="consultaId()">Consultar</button>
           </div>
         </div>
       </div>
       
     </div>
-    <div class="container">
-      <div class="row">
-        <div class="col grid">Nombre</div>
-        <div class="col grid">Carrera</div>
-        <div class="col grid">Semestre</div>
-        <div class="col grid">Codigo</div>
-        <div class="col grid">Acciones</div>
+    
+    <div class="container" [ngStyle]="{display: (banderaUsuarioEncontrado) ? 'flex': 'none'}">
+      <table class="table table-striped"> 
+        <thead>
+          <tr>
+            <th>Avatar</th>
+            <th>Nombre</th>
+            <th>Carrera</th>
+            <th>Semestre</th>
+            <th>Codigo</th>
+            <th>Tipo</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let usuario of usuarioBuscado">
+            <td><img src="{{usuario.avatar}}" alt="Imgen Usuario"></td>
+            <td>{{usuario.nombre}} {{usuario.apellido}}</td>
+            <td>{{usuario.carrera}}</td>         
+            <td>{{usuario.semestre}}</td>
+            <td>{{usuario.identificacion}}</td>
+            <td>{{usuario.tipo}}</td>
+            <td>
+              <div class="btns">
+                <button class="btn mr-2 btn-success" (click)="editUser($event, usuario)" data-toggle="modal" data-target="#exampleModalLong"><i class="fas fa-user"></i>Editar</button>
+                <button class="btn btn-danger" (click)="deleteUser($event, usuario)"><i class="far fa-trash-alt"></i>Eliminar</button>
+                <button class="btn btn-primary" (click)="generarQR($event, usuario)" data-toggle="modal" data-target=".bd-example-modal-lg3"><i class="fas fa-qrcode"></i>Generar QR</button>
+              </div> 
+              
+            </td>
 
-      </div>
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+              aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Actualizar Usuario</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    
+
+                    <div *ngIf="editando " style="display: block">
+                      <h2>Editar</h2>
+                      <form (ngSubmit)="updateUser()" autocomplete="off">
+                        <div class="avatarFrameonline">
+                          <img [src]="croppedImage" />
+                        </div>
+                        <div class="col-5 ctn-foto-usuario">
+                          <label for="file-upload" class="custom-file-upload">
+                            <i class="fa fa-cloud-upload"></i> Subir foto de usuario
+                          </label>
+                          <input id="file-upload" type="file" (change)="fileChangeEvent($event)" />
+                        </div>
+                        <div>
+                          <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true" [aspectRatio]="1 / 1"
+                            [resizeToWidth]="128" [cropperMinWidth]="128" [onlyScaleDown]="true" [roundCropper]="false" format="png"
+                            outputType="base64" (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()"
+                            (cropperReady)="cropperReady()" (loadImageFailed)="loadImageFailed()"></image-cropper>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-group col-md-6">
+                            <label for="nombre-usuario">Nombres</label>
+                            <input type="text" class="form-control" id="nombre-usuario" placeholder="Nombre(s)" name="nombre"
+                              [(ngModel)]="editingUser.nombre">
+                          </div>
+                          <div class="form-group col-md-6">
+                            <label>Apellido</label>
+                            <input type="text" class="form-control" placeholder="Apellido(s)" name="apellido"
+                              [(ngModel)]="editingUser.apellido">
+                          </div>
+                        </div>
+                    
+                        <div class="form-group">
+                          <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                              <label class="input-group-text" for="inputGroupSelect01">Tipo de usuario</label>
+                            </div>
+                            <select [(ngModel)]="editingUser.tipo" (change)="capturar()" class="custom-select" id="inputGroupUsers"
+                              name="tipo">
+                              <option selected>{{editingUser.tipo}}</option>
+                              <option *ngFor="let usuario of poblacion">
+                                {{usuario}}
+                              </option>
+                            </select>
+                            
+                          </div>
+                          <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                              <label class="input-group-text" for="inputGroupSelect01">Genero</label>
+                            </div>
+                            <select [(ngModel)]="editingUser.genero" (change)="generoUsuario()" class="custom-select" id="inputGroupUsers"
+                              name="genero">
+                              <option selected>{{editingUser.genero}}</option>
+                              <option *ngFor="let sexo of genero">
+                                {{sexo}}
+                              </option>
+                            </select>
+                    
+                          </div>
+                          <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                              <label class="input-group-text" for="inputGroupSelect01">Tipo de identificacion</label>
+                            </div>
+                            <select class="custom-select" id="inputGroupIds" [(ngModel)]="editingUser.tipoid" (change)="idUsuario()"
+                              name="tipoid">
+                              <option selected>{{editingUser.genero}}</option>
+                              <option *ngFor="let id of identificaciones">
+                                {{id}}
+                              </option>
+                            </select>
+                    
+                          </div>
+                          <div class="input-group mb-3" [ngStyle]="{display: (visible) ? 'flex': 'none'}">
+                            <div class="input-group-prepend">
+                              <label class="input-group-text" for="inputGroupSelect01">Semestre</label>
+                            </div>
+                            <select class="custom-select" id="inputGroupSemestres" [(ngModel)]="editingUser.semestre"
+                              (change)="semestreUsuario()" name="semestre">
+                              <option selected>{{editingUser.semestre}}</option>
+                              <option *ngFor="let semestre of semestres">
+                                {{semestre}}
+                              </option>
+                            </select>
+                    
+                          </div>
+                          <div class="input-group mb-3" [ngStyle]="{display: (visible) ? 'flex': 'none'}">
+                            <div class="input-group-prepend">
+                              <label class="input-group-text" for="inputGroupSelect01">Carrera</label>
+                            </div>
+                            <select class="custom-select" id="inputGroupCarreras" [(ngModel)]="editingUser.carrera"
+                              (change)="carreraUsuario()" name="carrera">
+                              <option selected>{{editingUser.carrera}}</option>
+                              <option *ngFor="let carrera of carreras">
+                                {{carrera}}
+                              </option>
+                            </select>
+                    
+                          </div>
+                    
+                          <div class="form-row">
+                            <div class="form-group col-md-6">
+                              <label for="nombre-usuario">Peso</label>
+                              <input type="number" class="form-control" placeholder="Peso en Kilogramos" name="peso" #peso="ngModel"
+                                [(ngModel)]="editingUser.peso" required>
+                             
+                            </div>
+                            <div class="form-group col-md-6">
+                              <label>Talla</label>
+                              <input type="number" class="form-control" placeholder="Estatura en metros" name="talla" #talla="ngModel"
+                                [(ngModel)]="editingUser.talla" required>
+                              
+                            </div>
+                          </div>
+                          <div class="form-row">
+                            <div class="form-group col-md-6">
+                              <label for="nombre-usuario">Perimetro Abdominal</label>
+                              <input type="number" class="form-control" placeholder="perimetro en centimetros" name="perimetro"
+                                #perimetro="ngModel" [(ngModel)]="editingUser.perimetro" required>
+                              
+                            </div>
+                            <div class="form-group col-md-6">
+                              <label>Telefono</label>
+                              <input type="text" class="form-control" placeholder="Numero telefonico" name="celular" #celular="ngModel"
+                                [(ngModel)]="editingUser.celular" required>
+                              <!--
+                                                                                    <div *ngIf="celular.touched && !celular.valid">
+                                                                                      <p style="color: red;" *ngIf="celular.errors.required">El telefono es requerido</p>
+                                                                                    </div>
+                                                                                    -->
+                            </div>
+                          </div>
+                    
+                          <label>Numero de identificacion</label>
+                          <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                            </div>
+                            <input type="text" class="form-control" placeholder="Numero de identificacion" name="identificacion"
+                              #identificacion="ngModel" [(ngModel)]="editingUser.identificacion">
+                          </div>
+                 
+                          <div class="form-group">
+                              <label>Correo Electronico</label>
+                              <div class="input-group mb-3">	
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text" id="basic-addon1"><i class="fas fa-envelope"></i></span>
+                                </div>
+                                <input type="email" class="form-control" placeholder="Correo electronico" name="email" #email="ngModel" [(ngModel)]="editingUser.email" (change)="emailUser()" required>
+                                
+                                
+                              </div>
+                            </div>
+                        </div>
+                          <div class="container">
+                            <div class="row">
+                              <div class="ctn-btn-registrar-usuario">
+                                <button type="submit" class="btn btn-primary" (click)="actualizar()">
+                                  <i class="fas fa-plus-circle"></i> Actualizar Usuario
+                                </button>
+                              </div>
+                              <div class="ctn-btn-registrar-usuario">
+                                <button type="reset" class="btn btn-secondary" (click)="resetForm(userForm)">
+                                  <i class="fas fa-sync-alt"></i> Limpiar Formulario
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        
+                      </form>
+                    </div>
+
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <div class="container" *ngIf="userList.length > 0; else nousuarios">
-      <div class="row">
-        <div class="datos" *ngFor="let user of userList">
-          <div class="col grid">
-            <ul class="campo" >
-              <li>{{user.nombre}} {{user.apellido}}</li>
-            </ul>
-          </div>
-          <div class="col grid ">
-            <ul class="campo" >
-              <li>{{user.carrera}}</li>
-            </ul>
-          </div>
-          <div class="col grid">
-            <ul class="campo" >
-              <li>{{user.semestre}}</li>
-            </ul>
-          </div>
-          <div class="col grid">
-            <ul class="campo" >
-              <li>{{user.$key}}</li>
-            </ul>
-          </div>
-          <div class="col btns grid">
-            <button style="margin-right: 7px" class="btn btn-success" (click)="onEdit(user)" data-toggle="modal" data-target=".bd-example-modal-lg"><i class="fas fa-user"></i></button>
-            <button class="btn btn-success" (click)="onEdit(user)" data-toggle="modal" data-target=".bd-example-modal-lg2"><i class="fas fa-bicycle"></i></button>
-            <button class="btn btn-danger" (click)="onDelete(user.$key)"><i class="far fa-trash-alt"></i>Eliminar</button>
-            <button class="btn btn-primary" (click)="onEdit(user)" data-toggle="modal" data-target=".bd-example-modal-lg3"><i class="fas fa-qrcode"></i>Generar QR</button>
-          </div>
-        </div>
-        
-      </div>
-    </div>
+    
   </div>
 </div>
 <ng-template #nousuarios> 
   <p>Aun no hay usuarios registrados</p>
 </ng-template>
 
-<!-- Large modal Estudiante-->
-<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="contenedor-formulario">
-        <div id="profileContainer">
-            <div class="container conten-formulario">
-              <div class="row">
-                <div class="col-md-4">
-                  <div class="avatarFrameonline">
-                    <img [src]="croppedImage" />
-                    
-                  </div>
-                  <hr />
-                                        
-                </div>
-                <div class="contenedor-formulario">
-                  <div class="col-5 ctn-foto-usuario">
-                    <label for="file-upload" class="custom-file-upload">
-                      <i class="fa fa-cloud-upload"></i> Subir foto de usuario
-                    </label>
-                    <input id="file-upload" type="file" (change)="fileChangeEvent($event)" />
-                  </div>
-                  <div>
-                    <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true" [aspectRatio]="1 / 1"
-                      [resizeToWidth]="128" [cropperMinWidth]="128" [onlyScaleDown]="true" [roundCropper]="false" format="png"
-                      outputType="base64" (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()"
-                      (cropperReady)="cropperReady()" (loadImageFailed)="loadImageFailed()"></image-cropper>
-                  </div>
-                  <form class="form-registrar-usuario" #userForm="ngForm" (ngSubmit)="onSubmit(userForm)">
-                    <h1 class="titulo-login">Datos de Usuario</h1>
-                    <input type="hidden" name="$key" #key="ngModel" [(ngModel)]="crudService.selectUser.$key">
-                    <div class="form-row">
-                      <div class="form-group col-md-6">
-                        <label for="nombre-usuario">Nombres</label>
-                        <input type="text" class="form-control" id="nombre-usuario" placeholder="Nombre(s)" name="nombre" #nombre="ngModel" [(ngModel)]="crudService.selectUser.nombre">
-                      </div>
-                      <div class="form-group col-md-6">
-                        <label>Apellido</label>
-                        <input type="text" class="form-control" placeholder="Apellido(s)" name="apellido" #apellido="ngModel" [(ngModel)]="crudService.selectUser.apellido">
-                      </div>
-                    </div>
-                    
-                  
-                  <div class="form-group">
-                    <div class="input-group mb-3">
-                      <div class="input-group-prepend">
-                        <label class="input-group-text" for="inputGroupSelect01">Tipo de usuario</label>
-                      </div>
-                      <select [(ngModel)]="tipoSeleccionado" (change)="capturar()" class="custom-select" id="inputGroupUsers" name="tipo">
-                        <option selected>{{crudService.selectUser.tipo}}</option>
-                        <option *ngFor="let usuario of poblacion" >
-                          {{usuario}}
-                        </option>
-                      </select>
-                      <div style="display: none">
-                        <input type="text" value="{{tipoSeleccionado}}" name="tipo" #tipo="ngModel" [(ngModel)]="crudService.selectUser.tipo">
-                      </div>
-                    </div>
-                    
-                    <div class="input-group mb-3">
-                      <div class="input-group-prepend">
-                        <label class="input-group-text" for="inputGroupSelect01">Tipo de identificacion</label>
-                      </div>
-                      <select class="custom-select" id="inputGroupIds" [(ngModel)]="idSeleccionado" (change)="idUsuario()" name="tipoid">
-                        <option selected>{{crudService.selectUser.tipoid}}</option>
-                        <option *ngFor="let id of identificaciones" >
-                          {{id}}
-                        </option>
-                      </select>
-                      <div style="display: none">
-                        <input type="text" value="{{idSeleccionado}}" name="tipoid" #tipoid="ngModel" [(ngModel)]="crudService.selectUser.tipoid">
-                      </div>
-                    </div>
-                    <div class="input-group mb-3" [ngStyle]="{display: (visible) ? 'flex': 'none'}">
-                      <div class="input-group-prepend">
-                        <label class="input-group-text" for="inputGroupSelect01">Semestre</label>
-                      </div>
-                      <select class="custom-select" id="inputGroupSemestres" [(ngModel)]="semestreSeleccionado" (change)="semestreUsuario()" name="semestre">
-                        <option selected>{{crudService.selectUser.semestre}}</option>
-                        <option *ngFor="let semestre of semestres">
-                          {{semestre}}
-                        </option>
-                      </select>
-                      <div style="display: none">
-                        <input type="text" value="{{semestreSeleccionado}}" name="semestre" #semestre="ngModel" [(ngModel)]="crudService.selectUser.semestre">
-                      </div>
-                    </div>
-                    <div class="input-group mb-3" [ngStyle]="{display: (visible) ? 'flex': 'none'}">
-                      <div class="input-group-prepend">
-                        <label class="input-group-text" for="inputGroupSelect01">Carrera</label>
-                      </div>
-                      <select class="custom-select" id="inputGroupCarreras" [(ngModel)]="carreraSeleccionada" (change)="carreraUsuario()" name="carrera">
-                        <option selected>{{crudService.selectUser.carrera}}</option>
-                        <option *ngFor="let carrera of carreras">
-                          {{carrera}}
-                        </option>
-                      </select>
-                      <div style="display: none">
-                        <input type="text" value="{{carreraSeleccionada}}" name="carrera" #carrera="ngModel" [(ngModel)]="crudService.selectUser.carrera">
-                      </div>
-                    </div>
-                    <label>Numero de identificacion</label>
-                    <div class="input-group mb-3">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-id-card"></i></span>
-                      </div>
-                      <input type="number" class="form-control" placeholder="Numero de identificacion" name="identificacion" #identificacion="ngModel" [(ngModel)]="crudService.selectUser.$key">
-                    </div>
-                  </div>
-                  
-                  <div class="container">
-                    <div class="row">
-                      <div class="ctn-btn-registrar-usuario">
-                        <button type="submit" class="btn btn-primary" (click)="actualizar()">
-                          <i class="fas fa-plus-circle"></i> Actualizar Usuario
-                        </button>
-                      </div>
-                      <div class="ctn-btn-registrar-usuario">
-                        <button type="reset" class="btn btn-secondary" (click)="resetForm(userForm)">
-                          <i class="fas fa-sync-alt"></i> Limpiar Formulario
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>      
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Large modal Bicicleta-->
-<div class="modal fade bd-example-modal-lg2" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="contenedor-formulario">
-        <div id="profileContainer">
-            <div class="container">
-              <div class="row">
-                <div class="col-md-4">
-                  <div class="avatarFrameonline">
-                    <img [src]="croppedImage" />
-                    
-                  </div>
-                  <hr/>
-                                        
-                </div>
-                <div class="contenedor-formulario">
-                  <div class="col-5 ctn-foto-usuario">
-                    <label for="file-upload" class="custom-file-upload">
-                      <i class="fa fa-cloud-upload"></i> Subir foto de Bicicleta
-                    </label>
-                    <input id="file-upload" type="file" (change)="fileChangeEvent($event)" />
-                  </div>
-                  <div>
-                    <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true" [aspectRatio]="1 / 1"
-                      [resizeToWidth]="128" [cropperMinWidth]="128" [onlyScaleDown]="true" [roundCropper]="false" format="png"
-                      outputType="base64" (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()"
-                      (cropperReady)="cropperReady()" (loadImageFailed)="loadImageFailed()"></image-cropper>
-                  </div>
-                  <form class="form-registrar-usuario" #userForm="ngForm" (ngSubmit)="onSubmit(userForm)">
-                    <h1 class="titulo-login">Datos de Bicicleta</h1>
-                    <div class="form-row">
-                      <div class="form-group col-md-6">
-                        <label for="nombre-usuario">Marca</label>
-                        <input type="text" class="form-control" id="nombre-usuario" placeholder="Nombre(s)" name="nombre" #nombre="ngModel" [(ngModel)]="crudService.selectUser.nombre">
-                      </div>
-                      <div class="form-group col-md-6">
-                        <label>Color</label>
-                        <input type="text" class="form-control" placeholder="Color Bicicleta" name="color" #color="ngModel" [(ngModel)]="bicicletaList">
-                      </div>
-                      <div class="form-group col-md-6">
-                        <label>Serial</label>
-                        <input type="text" class="form-control" placeholder="Apellido(s)" name="apellido" #apellido="ngModel" [(ngModel)]="crudService.selectUser.apellido">
-                      </div>
-                    </div>                 
-                  <div class="container">
-                    <div class="row">
-                      <div class="ctn-btn-registrar-usuario">
-                        <button type="submit" class="btn btn-primary" (click)="actualizarBike()">
-                          <i class="fas fa-plus-circle"></i> Actualizar Bicicleta
-                        </button>
-                      </div>
-                      <div class="ctn-btn-registrar-usuario">
-                        <button type="reset" class="btn btn-secondary" (click)="resetForm(userForm)">
-                          <i class="fas fa-sync-alt"></i> Limpiar Formulario
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>      
-      </div>
-    </div>
-  </div>
-</div>
-</div>
 
 <!-- Large modal Bicicleta-->
 <div class="modal fade bd-example-modal-lg3" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">

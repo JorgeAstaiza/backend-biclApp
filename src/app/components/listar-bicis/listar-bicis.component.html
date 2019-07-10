@@ -1,0 +1,294 @@
+<div class="wrapper">
+  <!-- Sidebar  -->
+  <nav id="sidebar">
+    <div class="sidebar-header">
+      <img class="logo" src="../../../assets/imagenes/Uni.png" alt="">
+    </div>
+    <ul class="list-unstyled components">
+      <li>
+        <a routerLink="/inicio" class="dropdown-toggle">
+          <i class="fas fa-key"></i>
+          Inicio
+        </a>
+      </li>
+      <li>
+        <a href="#usuarios" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+          <i class="fas fa-users"></i>
+          Registrar
+        </a>
+        <ul class="collapse list-unstyled" id="usuarios">
+          <li>
+            <a routerLink="/registrar-usuario">Registrar Usuario</a>
+          </li>
+          <li>
+            <a routerLink="/registrar-bicicleta">Registrar Bicicleta</a>
+          </li>
+          <li>
+            <a routerLink="/listar-usuarios">Listar usuarios</a>
+          </li>
+          <li>
+            <a routerLink="/listar-bicicletas">Listar Bicicletas</a>
+          </li>
+        </ul>
+      </li>
+      <li >
+        <a routerLink="/reporte" class="dropdown-toggle">
+          <i class="fas fa-chart-area"></i>
+          Reporte completo
+        </a>
+      </li>
+      <li>
+        <a href="#incentivos" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+          <i class="fas fa-briefcase"></i>
+          Incentivos
+        </a>
+        <ul class="collapse list-unstyled" id="incentivos">
+          <li>
+            <a routerLink="/crear-incentivo">Crear un incentivo</a>
+          </li>
+          <li>
+            <a routerLink="/listar-incentivos">Listar incentivos</a>
+          </li>
+          
+        </ul>
+        
+      </li>
+      <li>
+        <a (click)="logout()">
+          <i class="fas fa-image"></i>
+          Cerrar Sesion
+        </a>
+      </li>
+    </ul>
+  </nav>
+  
+  <!-- Page Content  -->
+  <div id="content">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <p>Bienvenido al Team Bike</p>
+      </div>
+    </nav>
+    <div class="form-group">
+      <h2>Consulta una bicicleta</h2>
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            <div class="input-group mb-3" style="margin: 0 !important">	
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1"><i class="far fa-envelope"></i></span>
+              </div>
+              <input [(ngModel)]="idUsuario" type="text" class="form-control" placeholder="Email del usuario">
+            </div>
+          </div>
+          <div class="col btn-consultar-usuario">
+            <button class="btn btn-success" (click)="consultarBicicletas()">Consultar</button>
+          </div>
+        </div>
+      </div> 
+      
+    </div>
+    <!--
+    <div class="container" [ngStyle]="{display: (banderaUsuarioNoEncontrado) ? 'flex': 'none'}">
+      <table class="table table-striped" >
+        <thead>
+          <tr>
+              <th>Serial</th>
+              <th>Color</th>
+              <th>Marca</th>
+              <th>Tipo</th>
+              <th>Acciones</th>
+          </tr> 
+        </thead>
+      <tbody >
+          <tr *ngFor="let bici of bicicletasList" >
+              <td>{{bici.serial}}</td>
+              <td>{{bici.color}}</td>         
+              <td>{{bici.marca}}</td>
+              <td>{{bici.tipo}}</td>
+              <td>
+                <div class="btns">
+                  <button class="btn btn-success mr-2" (click)="onEdit(bici)" data-toggle="modal" data-target=".bd-example-modal-lg"><i class="fas fa-bicycle"></i></button>
+                  <button class="btn btn-danger" (click)="onDelete()"><i class="far fa-trash-alt"></i>Eliminar</button>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+      </table>
+    </div>    
+    -->
+    <div class="container" [ngStyle]="{display: (banderaUsuarioEncontrado) ? 'flex': 'none'}">
+      <table class="table table-striped" >
+        <thead>
+          <tr>
+            <th>Serial</th>
+            <th>Color</th>
+            <th>Marca</th>
+            <th>Tipo</th>
+            <th>Acciones</th>
+          </tr> 
+        </thead>
+      <tbody >
+          <tr *ngFor="let usuario of usuarioBuscado" >
+              <td><img src="{{usuario.avatar}}" alt="Imagen Bicicleta"></td>
+              <td>{{usuario.serial}}</td>
+              <td>{{usuario.color}}</td>         
+              <td>{{usuario.marca}}</td>
+              <td>{{usuario.tipo}}</td>
+              <td>
+                <div class="btns">
+                  <button class="btn btn-success mr-2" (click)="editBike($event, usuario)" data-toggle="modal" data-target="#exampleModalLong"><i class="fas fa-bicycle"></i>Editar</button>
+                  <button class="btn btn-danger" (click)="onDelete()"><i class="far fa-trash-alt"></i>Eliminar</button>
+              </div>
+            </td>
+
+
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      
+                      <div *ngIf="editando">
+                        <h2>Editar Bicicleta</h2>
+                        <form (ngSubmit)="updateBike()" autocomplete="off">
+                          <div class="avatarFrameonline">
+                            <img [src]="croppedImage" />
+                          </div>
+
+                          <div class="col-5 ctn-foto-usuario">
+                            <label for="file-upload" class="custom-file-upload">
+                              <i class="fa fa-cloud-upload"></i> Subir foto de usuario
+                            </label>
+                            <input id="file-upload" type="file" (change)="fileChangeEvent($event)" />
+                          </div>
+
+                          <div>
+                            <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true" [aspectRatio]="4 / 3"
+                              [resizeToWidth]="128" [cropperMinWidth]="128" [onlyScaleDown]="true" [roundCropper]="false" format="png"
+                              outputType="base64" (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()"
+                              (cropperReady)="cropperReady()" (loadImageFailed)="loadImageFailed()"></image-cropper>
+                          </div>
+                          <div class="form-row">
+                            <div class="form-group col-md-6">
+                              <label for="color-bici">Correo electronico del usuario</label>
+                              <input type="email" class="form-control" id="color-bici" placeholder="Example@email.com" name="identificacion"
+                                #identificacion="ngModel" [(ngModel)]="editingBike.id" disabled>
+                            </div>
+                      
+                            <div class="form-group col-md-6">
+                              <label for="nombre-usuario">Marca</label>
+                              <input type="text" class="form-control" id="nombre-usuario" placeholder="Marca del marco" name="marca"
+                                #marca="ngModel" [(ngModel)]="editingBike.marca">
+                            </div>
+                            <div class="form-group col-md-6">
+                              <label>Color</label>
+                              <input type="text" class="form-control" placeholder="Color de la Bicicleta" name="color" #color="ngModel"
+                                [(ngModel)]="editingBike.color">
+                            </div>
+                            <div class="form-group col-md-6">
+                              <label>Serial</label>
+                              <input type="text" class="form-control" placeholder="Serial del marco" name="serial" #serial="ngModel"
+                                [(ngModel)]="editingBike.serial">
+                            </div>
+                          </div>
+                          <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                              <label class="input-group-text" for="inputGroupSelect01">Tipo</label>
+                            </div>
+                            <select class="custom-select" id="inputGroupCarreras" [(ngModel)]="editingBike.tipo" (change)="tipoSeleccionado()"
+                              name="tipo">
+                              <option *ngFor="let tipo of tiposBici">
+                                {{tipo}}
+                              </option>
+                            </select>
+                            <!--
+                                                    <div *ngIf="tipoBicicletaSeleccionada" style="display: none;">
+                                                      <input type="text" value="{{tipoBicicletaSeleccionada}}" name="tipo" #tipo="ngModel" [(ngModel)]="crudService.selectedBicicleta.tipo">
+                                                    </div>
+                                                    -->
+                          </div>
+                          <div class="container">
+                            <div class="row">
+                              <div class="ctn-btn-registrar-usuario">
+                                <button type="submit" class="btn btn-primary" (click)="actualizarBike()">
+                                  <i class="fas fa-plus-circle"></i> Actualizar Bicicleta
+                                </button>
+                              </div>
+                              <div class="ctn-btn-registrar-usuario">
+                                <button type="reset" class="btn btn-secondary" (click)="resetForm(userForm)">
+                                  <i class="fas fa-sync-alt"></i> Limpiar Formulario
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </tr>
+        </tbody>
+      </table>
+    </div>    
+  </div>
+</div>
+<ng-template #nousuarios> 
+  <p>Aun no hay usuarios registrados</p>
+</ng-template>
+
+<!-- Large modal Bicicleta
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="contenedor-formulario">
+        <div id="profileContainer">
+            <div class="container">
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="avatarFrameonline">
+                    <img [src]="croppedImage" />
+                    
+                  </div>
+                  <hr/>
+                                        
+                </div>
+                <div class="contenedor-formulario">
+                  <div class="col-5 ctn-foto-usuario">
+                    <label for="file-upload" class="custom-file-upload">
+                      <i class="fa fa-cloud-upload"></i> Subir foto de Bicicleta
+                    </label>
+                    <input id="file-upload" type="file" (change)="fileChangeEvent($event)" />
+                  </div>
+                  <div>
+                    <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true" [aspectRatio]="1 / 1"
+                      [resizeToWidth]="128" [cropperMinWidth]="128" [onlyScaleDown]="true" [roundCropper]="false" format="png"
+                      outputType="base64" (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()"
+                      (cropperReady)="cropperReady()" (loadImageFailed)="loadImageFailed()"></image-cropper>
+                  </div>
+                  <form class="form-registrar-usuario" #bikeForm="ngForm" (ngSubmit)="onSubmit(bikeForm)" autocomplete="off">
+                    <h1 class="titulo-login">Datos de Bicicleta</h1>
+                    <input type="hidden" name="$key" #key="ngModel" [(ngModel)]="crudService.selectedBicicleta.$key">  
+                    
+                        
+                  
+                </form>
+              </div>
+            </div>
+          </div>      
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+-->

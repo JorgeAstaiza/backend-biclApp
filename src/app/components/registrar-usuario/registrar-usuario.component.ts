@@ -17,6 +17,7 @@ import { ToastrService } from 'ngx-toastr'
 })
  
 export class RegistrarUsuarioComponent implements OnInit {
+  user = {} as Usuario
   userForm: FormGroup;
   submitted = false;
   poblacion;
@@ -36,9 +37,9 @@ export class RegistrarUsuarioComponent implements OnInit {
   email: string = null;
   emailUs: string = null;
   UserPassword: string = null;
-  public isError = false;
+  contador: number = 0;
   constructor(private formBuilder: FormBuilder, 
-    private crudService: CrudService, 
+    public crudService: CrudService, 
     private autorizacionServices: AutorizacionService, 
     private router: Router,
     private toaster: ToastrService
@@ -52,23 +53,23 @@ export class RegistrarUsuarioComponent implements OnInit {
   }
   ngOnInit(){
     this.crudService.getUsers();
-  }
+  } 
 
   capturar(){
-    this.verSeleccion = this.tipoSeleccionado;
+    this.verSeleccion = this.user.tipo;
     if(this.verSeleccion == 'Estudiante'){
       this.visible = true;
     }else{
       this.visible = false;
-      this.semestreSeleccionado = "Sin Semestre"
-      this.carreraSeleccionada = "Sin Carrera"
     }
+    this.user.contador = 0;
+    console.log(this.user.contador)
   }
   generoUsuario(){
     this.generoSeleccionado;
   }
   emailUser(){
-    this.email = this.crudService.selectUser.email;
+    this.email = this.user.email;
   }
   idUsuario(){
     this.idSeleccionado;
@@ -84,12 +85,6 @@ export class RegistrarUsuarioComponent implements OnInit {
     this.tipoid;
   }
   
-  resetForm(userForm: NgForm){
-    if(userForm != null){
-      userForm.reset();
-      this.crudService.selectUser = new Usuario();
-    }
-  }
   logout(){
     this.autorizacionServices.logOut().then(()=>{
       this.router.navigate([''])
@@ -97,27 +92,15 @@ export class RegistrarUsuarioComponent implements OnInit {
       console.log(err);
     });
   }
-  onSubmit(userForm: NgForm) {     
-    if (userForm.valid) {
-      this.submitted = true;
-      this.crudService.insertUser(userForm.value);      
-      this.resetForm(userForm);
-      this.toaster.success('Operacion Satisfactoria', 'Usuario Registrado');
-    }else{
-      this.resetForm(userForm);
-      this.toaster.error('ERROR', 'Formulario invalido');
-      this.generoSeleccionado = '0';
-      this.tipoSeleccionado = '0';
-      this.idSeleccionado = '0';
-      this.semestreSeleccionado = '0';
-      this.carreraSeleccionada = '0';
-      this.visible = false;
-    }
-    
+  addUser(userForm: NgForm){
+    console.log(this.user)
+    this.crudService.insertUser(this.user);
+    this.toaster.success('Operacion Satisfactoria', 'Usuario Registrado');
+    userForm.reset();
   }
   
   registrar(){
-    if(this.email != null && this.UserPassword != null && this.carreraSeleccionada != '0' && this.generoSeleccionado != '0' && this.semestreSeleccionado != '0' && this.tipoSeleccionado != '0'){
+    console.log('en registrar ' + this.email)
       this.autorizacionServices.registro(this.email, this.UserPassword).then((data) => {
         const user = {
           //uid: data.user.uid,
@@ -134,8 +117,7 @@ export class RegistrarUsuarioComponent implements OnInit {
         console.log(err)
       })
       
-    } 
-    if(this.crudService.selectUser.nombre == null){
+    /*if(this.crudService.selectUser.nombre == null){
       this.toaster.error('Formulario incompleto', 'El nombre es obligatorio');
     }
     if(this.crudService.selectUser.apellido == null){
@@ -146,7 +128,7 @@ export class RegistrarUsuarioComponent implements OnInit {
     }
     if(this.crudService.selectUser.email == null){
       this.toaster.error('Formulario incompleto', 'El email es obligatorio');
-    }
+    }*/
     if(this.generoSeleccionado == '0'){
       this.toaster.error('Formulario incompleto', 'el genero es obligatorio');
     }

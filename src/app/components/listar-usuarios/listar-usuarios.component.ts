@@ -10,6 +10,8 @@ import { AngularFireStorage } from '@angular/fire/storage';
 import { Bicicleta } from 'src/app/models/bicicleta';
 import { NgForm, FormGroup } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr'
+import { element } from '@angular/core/src/render3';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-listar-usuarios',
@@ -17,14 +19,14 @@ import { ToastrService } from 'ngx-toastr'
   styleUrls: ['./listar-usuarios.component.css']
 })
 export class ListarUsuariosComponent implements OnInit {
+  editando: boolean = false;
+  editingUser: Usuario
   userForm: FormGroup;
   poblacion;
   user: Usuario;
-  bicicletasList: Bicicleta[];
-  bicicleta: Bicicleta;
   picture: any;
   pictureBike: any;
-  userList: Usuario[];
+  userList= [];
   visible: boolean = true;
   tipoSeleccionado: string = '0';
   verSeleccion: string = '';
@@ -36,53 +38,69 @@ export class ListarUsuariosComponent implements OnInit {
   semestres;
   carreras;
   genero;
-  x;
+  dataUser;
   keyUsuario;
-  constructor(private crudService: CrudService, private autorizacionServices: AutorizacionService, private router: Router, private firebaseStorage: AngularFireStorage, private toaster: ToastrService) { 
+  idUsuario: string;
+  usuarioBuscado = [];
+  banderaUsuarioEncontrado = false;
+  banderaUsuarioNoEncontrado = true;
+  email;
+  generoSeleccionado;
+  constructor(public crudService: CrudService, private autorizacionServices: AutorizacionService, private router: Router, private firebaseStorage: AngularFireStorage, private toaster: ToastrService) { 
     this.poblacion=['Estudiante', 'Docente', 'Administrativo', 'Otro'];
     this.semestres=[1,2,3,4,5,6,7,8,9,10];
     this.carreras=['Ingeniería de Sistemas Informáticos', 'Ingeniería Electrónica', 'Ingeniería Ambiental y Sanitaria', 'Pregrado en Finanzas y Negocios Internacionales', 'Derecho', 'Administración de Empresas', 'Entrenamiento Deportivo', 'Licenciatura en Educación Infantil', 'Contaduría Pública'];
     this.genero=['hombre', 'mujer']
+    //this.editingUser = this.userList;
 
+    
   }
   capturar(){
-    this.verSeleccion = this.tipoSeleccionado;
+    this.verSeleccion = this.tipoSeleccionado; 
     if(this.verSeleccion == 'Estudiante'){
       this.visible = true;
     }else{
       this.visible = false;
     }
   }
-  ngOnInit() {
-    
-    this.crudService.getUsers()
-      .snapshotChanges()
-      .subscribe(item =>{
-        this.userList = [];
-        this.bicicletasList = [];
-        item.forEach(element => {
-          this.x = element.payload.toJSON();
-          this.x["$key"] = element.key;
-          this.bicicletasList.push(this.x.bicicletas as Bicicleta);
-          this.userList.push(this.x as Usuario)
-          //console.log(this.userList[x])
-        })
-      })
+  ngOnInit() { 
+    this.crudService.getUsers().subscribe((item)=>{
+      this.userList = item.map(e=>{
+        return{
+          id: e.payload.doc.id,
+          ...e.payload.doc.data()
+        }as Usuario
+      });
+      console.log(this.userList);
+    })
+  }
+  emailUser(){
+    //this.email = this.crudService.selectUser.email;
+  }
+  generoUsuario(){
+    this.generoSeleccionado;
   }
   
-  onSubmit(userForm: NgForm){
-    this.crudService.updateUser(userForm.value)
-    console.log('usuario actualizado');
+  editUser(event, user){
+   this.editingUser = user;
+   console.log(this.editingUser)
+   this.editando = !this.editando;
+   this.keyUsuario = this.editingUser.id
   }
-  onEdit(user: Usuario){
-    this.crudService.selectUser = Object.assign({}, user);
-    this.keyUsuario = this.crudService.selectUser.$key
-    console.log('el id del seleccionado es ' + this.keyUsuario)
-    //this.crudService.selectedBicicleta = bicicleta;
+  generarQR(event, user){
+    this.editingUser = user;
+    this.keyUsuario = this.editingUser.id
   }
-  onDelete($key:string){
-    this.crudService.deleteProduct($key);
+  updateUser(){
+    this.crudService.updateUser(this.editingUser);
+    this.editingUser = {} as Usuario;
+    this.editando = false;
+  }
+
+  deleteUser(event, user){
+    this.crudService.deleteProduct(user)
     this.toaster.success('Operacion Satisfactoria', 'Usuario eliminado');
+    
   }
   logout(){
     this.autorizacionServices.logOut().then(()=>{
@@ -92,6 +110,29 @@ export class ListarUsuariosComponent implements OnInit {
     });
   }
 
+  consultaId(){
+    this.usuarioBuscado = [];
+    for(let i=0; this.userList.length; i++){
+      if(this.userList[i].id == this.idUsuario){
+        console.log(this.usuarioBuscado);
+        this.usuarioBuscado.push(this.userList[i])
+        this.banderaUsuarioNoEncontrado = false;
+        this.banderaUsuarioEncontrado = true;
+        break;
+      }
+      if(this.idUsuario == undefined){
+        this.banderaUsuarioNoEncontrado = true;
+        this.banderaUsuarioEncontrado = false;
+        this.toaster.error('ERROR', 'Completa el campo');
+        //break;
+      }else{
+        this.toaster.error('ERROR', 'Usuario no encontrado');
+        this.banderaUsuarioNoEncontrado = true;
+        this.banderaUsuarioEncontrado = false;
+        //break;
+      }
+    }
+  }
   actualizar(){
     if (this.croppedImage) {
       const userPictureId = Math.random().toString(36).substring(2);
@@ -113,27 +154,6 @@ export class ListarUsuariosComponent implements OnInit {
     }
   
 }
-  actualizarBike(){
-    if (this.croppedImage) {
-      const userPictureId = Math.random().toString(36).substring(2);
-      const pictureBike = this.firebaseStorage.ref('bicicletas/' + userPictureId + '.jpg').putString(this.croppedImage, 'data_url');
-      pictureBike.then((result) => {
-        this.picture = this.firebaseStorage.ref('bicicletas/' + userPictureId + '.jpg').getDownloadURL();
-        this.picture.subscribe((p) => {
-          this.crudService.setAvatarBike(p, this.keyUsuario).then(() => {
-            this.toaster.success('Operacion Satisfactoria', 'Imagen de bicicleta subida');    
-          }).catch((error) => {
-            this.toaster.error('error', 'No se pudo subir la imagen');
-            console.log(error);
-          });
-        });
-      }).catch((error) => {
-        console.log(error);
-      });
-    }
-    this.croppedImage = "";
-  }
-
   @ViewChild(ImageCropperComponent) imageCropper: ImageCropperComponent;
 
   fileChangeEvent(event: any): void {

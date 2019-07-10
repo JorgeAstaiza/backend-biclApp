@@ -3,7 +3,6 @@
   <nav id="sidebar">
     <div class="sidebar-header">
       <img class="logo" src="../../../assets/imagenes/Uni.png" alt="">
-      <img class="logo-reducido" src="img/logo-reducido.png" alt="">
     </div>
     <ul class="list-unstyled components">
       <li>
@@ -15,18 +14,24 @@
       <li>
         <a href="#usuarios" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
           <i class="fas fa-users"></i>
-          Registrar usuario
+          Registrar
         </a>
         <ul class="collapse list-unstyled" id="usuarios">
           <li>
-            <a routerLink="/registrar-usuario">Registrar</a>
+            <a routerLink="/registrar-usuario">Registrar Usuario</a>
           </li>
           <li>
-            <a routerLink="/listar-usuario">Listar usuarios</a>
+            <a routerLink="/registrar-bicicleta">Registrar Bicicleta</a>
+          </li>
+          <li>
+            <a routerLink="/listar-usuarios">Listar usuarios</a>
+          </li>
+          <li>
+            <a routerLink="/listar-bicicletas">Listar Bicicletas</a> 
           </li>
         </ul>
       </li>
-      <li >
+      <li>
         <a routerLink="/reporte" class="dropdown-toggle">
           <i class="fas fa-chart-area"></i>
           Reporte completo
@@ -45,10 +50,7 @@
             <a routerLink="/listar-incentivos">Listar incentivos</a>
           </li>
         </ul>
-        <a href="autorizaciones.html" class="dropdown-toggle">
-          <i class="fas fa-key"></i>
-          Autorizaciones
-        </a>
+         
       </li>
       <li>
         <a (click)="logout()">
@@ -74,48 +76,78 @@
         <div class="row">
           <div class="input-group mb-3">
             <div class="input-group-prepend">
-              <label class="input-group-text" for="inputGroupSelect01">Poblacion</label>
+              <label class="input-group-text" for="inputGroupSelect01">Tipo de usuario</label>
             </div>
-            <select class="custom-select" id="poblacion">
+            <select [(ngModel)]="tipoSeleccionado" (change)="capturar()" class="custom-select" id="inputGroupUsers" name="tipo" required>
               <option *ngFor="let usuario of poblacion">
                 {{usuario}}
               </option>
             </select>
           </div>
 
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="inputGroupSelect01">Carrera</label>
-            </div>
-            <select class="custom-select" id="carrera">
-              <option *ngFor="let carrera of carreras">
-                {{carrera}}
-              </option>
-            </select>
-          </div>
-          <div class="input-group mb-3">
+          <div class="input-group mb-3" [ngStyle]="{display: (visible) ? 'flex': 'none'}">
             <div class="input-group-prepend">
               <label class="input-group-text" for="inputGroupSelect01">Semestre</label>
             </div>
-            <select class="custom-select" id="semestre">
+            <select class="custom-select" id="inputGroupSemestres" [(ngModel)]="semestreSeleccionado" name="semestre">
               <option *ngFor="let semestre of semestres">
                 {{semestre}}
               </option>
             </select>
           </div>
-          <div class="input-group mb-3">
+          <div class="input-group mb-3" [ngStyle]="{display: (visible) ? 'flex': 'none'}">
             <div class="input-group-prepend">
-              <label class="input-group-text" for="inputGroupSelect01">Tiempo</label>
+              <label class="input-group-text" for="inputGroupSelect01">Carrera</label>
             </div>
-            <select class="custom-select" id="Tiempo">
-              <option *ngFor="let fecha of tiempo">
-                {{fecha}}
+            <select class="custom-select" id="inputGroupCarreras" [(ngModel)]="carreraSeleccionada" name="carrera">
+              <option *ngFor="let carrera of carreras">
+                {{carrera}}
               </option>
             </select>
           </div>
+          <div class="form-group row">
+            <label for="example-datetime-local-input" class="col-2 col-form-label">Fecha de inicio *</label>
+            <div class="col-10">
+              <input class="form-control" type="date" name="fechaInicio" [(ngModel)]="fechaInicio">
+            </div>
+           
+          </div>
+          <div class="form-group row">
+            <label for="example-datetime-local-input" class="col-2 col-form-label">Fecha de fin *</label>
+            <div class="col-10">
+              <input class="form-control" type="date" value="2011-08-19T13:45:00" name="fechaFin" [(ngModel)]="fechaFin" >
+            </div>
+            
+          </div>
         </div>
       </div>
-      <button class="btn btn-primary">Generar</button>
+      <button class="btn btn-primary" (click)="generarReporte()">Generar</button>
     </form> 
+    <!--LISTA DE REPORTE-->
+    <div *ngIf="userListOrdenados.length > 0; else nousuarios">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+              <th>Puesto</th>
+              <th>Nombre</th>
+              <th>Usuario</th>
+              <th>Identificacion</th>
+              <th>Contador</th>
+          </tr>
+      </thead>
+      <tbody  >
+          <tr *ngFor="let contador of userListOrdenados; let indice=index">
+              <td>{{indice+1}}</td>
+              <td>{{contador.nombre}} {{contador.apellido}}</td>
+              <td>{{contador.tipo}}</td>            
+              <td>{{contador.identificacion}}</td>
+              <td>{{contador.contador}}</td>
+          </tr>
+      </tbody>
+      </table>
+    </div>
   </div>
 </div>
+<ng-template #nousuarios> 
+  <p>Consulta una poblacion</p>
+</ng-template>

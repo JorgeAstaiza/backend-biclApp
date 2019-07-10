@@ -18,18 +18,10 @@ export class CodeqrComponent implements OnInit {
   //value = this.userList[0];
   ngOnInit() {
     this.crudService.getUsers()
-      .snapshotChanges()
       .subscribe(item =>{
-        this.userList = [];
-        item.forEach(element => {
-          let x = element.payload.toJSON();
-          x["$key"] = element.key;
-          this.userList.push(x as Usuario)
-          console.log(this.userList);
-          this.value = x["$key"];
-
-        })
-      })
+        //this.userList = item;
+        
+      })      
 
   }
 
